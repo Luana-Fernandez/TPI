@@ -1,10 +1,11 @@
+
 package com.mycompany.tpi.Modelos;
 
-import java.util.List;
+import java.util.*;
 
 
-class Carrera {
-    private int idCarrera;
+public class Carrera {
+ private int idCarrera;
     private String categoria;
     private String horaInicio;
     private String horaFin;
@@ -12,7 +13,11 @@ class Carrera {
     private String detalle;
     private List<Competidor> competidores;
 
-    public Carrera(int idCarrera, String categoria, String horaInicio, String horaFin, String ubicacion, String detalle) {
+    public Carrera() {
+    }
+    
+    
+       public Carrera(int idCarrera, String categoria, String horaInicio, String horaFin, String ubicacion, String detalle) {
         this.idCarrera = idCarrera;
         this.categoria = categoria;
         this.horaInicio = horaInicio;
@@ -82,5 +87,5 @@ class Carrera {
         return "Carrera{" + "idCarrera=" + idCarrera + ", categoria=" + categoria + ", horaInicio=" + horaInicio + ", horaFin=" + horaFin + ", ubicacion=" + ubicacion + ", detalle=" + detalle + ", competidores=" + competidores + '}';
     }
     
-    
 }
+

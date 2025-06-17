@@ -3,7 +3,7 @@ package com.mycompany.tpi.Modelos;
 import java.util.List;
 
 
-class Competidor extends Persona{
+public class Competidor extends Persona{
     
     private int idCorredor;
     private int faltas;

@@ -1,9 +1,12 @@
 package com.mycompany.tpi;
 
+import com.mycompany.tpi.controlador.ControladorPrincipal;
+
 
 public class TPI {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        ControladorPrincipal controlador = new ControladorPrincipal();
+        controlador.menu();
     }
 }
