@@ -1,5 +1,7 @@
 package com.mycompany.tpi.Modelos;
 
+import java.util.List;
+
 
 public abstract class Persona {
     private int idPersona;
@@ -7,16 +9,17 @@ public abstract class Persona {
     private String apellido;
     private String mail;
     private String categoria;
-    private Carrera carreras[];
+    private List<Carrera> carreras[];
 
-    public Persona(int idPersona, String nombre, String apellido, String mail, String categoria, Carrera[] carreras) {
+    public Persona(int idPersona, String nombre, String apellido, String mail, String categoria) {
         this.idPersona = idPersona;
         this.nombre = nombre;
         this.apellido = apellido;
         this.mail = mail;
         this.categoria = categoria;
-        this.carreras = carreras;
     }
+
+   
 
     public int getIdPersona() {
         return idPersona;
@@ -58,18 +61,13 @@ public abstract class Persona {
         this.categoria = categoria;
     }
 
-    public Carrera[] getCarreras() {
-        return carreras;
-    }
-
-    public void setCarreras(Carrera[] carreras) {
-        this.carreras = carreras;
-    }
-
     @Override
     public String toString() {
-        return "Persona{" + "idPersona=" + idPersona + ", nombre=" + nombre + ", apellido=" + apellido + ", mail=" + mail + ", categoria=" + categoria + ", carreras=" + carreras + '}';
+        return "Persona{" + "idPersona=" + idPersona + ", nombre=" + nombre + ", apellido=" + apellido + ", mail=" + mail + ", categoria=" + categoria + '}';
     }
     
+    
+
+   
     
 }
