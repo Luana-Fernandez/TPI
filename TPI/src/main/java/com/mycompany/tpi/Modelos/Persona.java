@@ -9,7 +9,7 @@ public abstract class Persona {
     private String apellido;
     private String mail;
     private String categoria;
-    private List<Carrera> carreras[];
+    //\\private List<Carrera> carreras[]; 
 
     public Persona(int idPersona, String nombre, String apellido, String mail, String categoria) {
         this.idPersona = idPersona;

@@ -10,4 +10,11 @@
         <maven.compiler.release>24</maven.compiler.release>
         <exec.mainClass>com.mycompany.tpi.TPI</exec.mainClass>
     </properties>
+        <dependencies>    
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.13.3</version>
+        </dependency>
+    </dependencies>
 </project>
