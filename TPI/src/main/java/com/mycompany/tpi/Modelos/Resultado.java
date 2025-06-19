@@ -2,20 +2,26 @@ package com.mycompany.tpi.Modelos;
 
 
 public class Resultado {
+    private int idResultado;
     private int idCompetidor;
     private int carrera;
-    private String tiempo;
+    private String tiempoCompetidor;
     private String estado;
     private int numCorredor;
     private int faltas;
 
-    public Resultado(int idCompetidor, int carrera, String tiempo, String estado, int numCorredor, int faltas) {
+    public Resultado(int idCompetidor, int carrera, int numCorredor) {
         this.idCompetidor = idCompetidor;
         this.carrera = carrera;
-        this.tiempo = tiempo;
-        this.estado = estado;
         this.numCorredor = numCorredor;
-        this.faltas = faltas;
+    }
+
+    public int getIdResultado() {
+        return idResultado;
+    }
+
+    public void setIdResultado(int idResultado) {
+        this.idResultado = idResultado;
     }
 
     public int getIdCompetidor() {
@@ -34,12 +40,12 @@ public class Resultado {
         this.carrera = carrera;
     }
 
-    public String getTiempo() {
-        return tiempo;
+    public String getTiempoCompetidor() {
+        return tiempoCompetidor;
     }
 
-    public void setTiempo(String tiempo) {
-        this.tiempo = tiempo;
+    public void setTiempoCompetidor(String tiempo) {
+        this.tiempoCompetidor = tiempo;
     }
 
     public String getEstado() {
@@ -71,10 +77,4 @@ public class Resultado {
     public String toString() {
         return "Resultado{" + "idCompetidor=" + idCompetidor + ", carrera=" + carrera + ", tiempo=" + tiempo + ", estado=" + estado + "numCorredor=" + numCorredor + "faltas=" + faltas + '}';
     }
-    
-    public void calcularRankingCategoria(){}
-    public void calcularRankingGeneral(){}
-    public void registrarTiempo(){}
-    public void modificarEstado(){}
-    
 }

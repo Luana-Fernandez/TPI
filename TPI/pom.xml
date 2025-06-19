@@ -10,19 +10,12 @@
         <maven.compiler.release>24</maven.compiler.release>
         <exec.mainClass>com.mycompany.tpi.TPI</exec.mainClass>
     </properties>
-<<<<<<< HEAD
+
     <dependencies>
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.33</version>
-=======
-        <dependencies>    
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.13.3</version>
->>>>>>> 6aaf8cadeac30df596e6ae432d9f4168a675906b
-        </dependency>
-    </dependencies>
+            </dependency>
+   </dependencies>
 </project>

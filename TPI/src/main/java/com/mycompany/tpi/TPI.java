@@ -1,10 +1,6 @@
 package com.mycompany.tpi;
 
 import com.mycompany.tpi.controlador.ControladorPrincipal;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.util.Scanner;
-
 
 public class TPI {
 
