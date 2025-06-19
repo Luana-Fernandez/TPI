@@ -8,6 +8,11 @@ public abstract class Persona {
     private String nombre;
     private String apellido;
     private String mail;
+<<<<<<< HEAD
+=======
+    private String categoria;
+    //\\private List<Carrera> carreras[]; 
+>>>>>>> 6aaf8cadeac30df596e6ae432d9f4168a675906b
 
     public Persona(int idPersona, String nombre, String apellido, String mail) {
         this.idPersona = idPersona;

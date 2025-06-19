@@ -1,14 +1,20 @@
 package com.mycompany.tpi.controlador;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.tpi.Modelos.Carrera;
 import com.mycompany.tpi.Modelos.Competidor;
 import com.mycompany.tpi.Modelos.Juez;
 
 import com.mycompany.tpi.Modelos.Resultado;
 import com.mycompany.tpi.vista.VistaPrincipal;
+<<<<<<< HEAD
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
+=======
+import java.io.File;
+>>>>>>> 6aaf8cadeac30df596e6ae432d9f4168a675906b
 import java.util.*;
 
 public class ControladorPrincipal {
@@ -18,7 +24,18 @@ public class ControladorPrincipal {
     private List<Juez> jueces = new ArrayList<>();
     private List<Carrera> carreras = new ArrayList<>();
     private List<Resultado> resultados = new ArrayList<>();
+<<<<<<< HEAD
 
+=======
+    private ObjectMapper mapper = new ObjectMapper();
+    private String urlCompetidores="C:\\Users\\alvar\\OneDrive\\Documentos\\Programacion II\\TPI\\TPI\\TPI\\src\\main\\java\\com\\mycompany\\tpi\\archivos\\competidores.json";
+    private String urlJueces="C:\\Users\\alvar\\OneDrive\\Documentos\\Programacion II\\TPI\\TPI\\TPI\\src\\main\\java\\com\\mycompany\\tpi\\archivos\\jueces.json";
+    private String urlCarreras="C:\\Users\\alvar\\OneDrive\\Documentos\\Programacion II\\TPI\\TPI\\TPI\\src\\main\\java\\com\\mycompany\\tpi\\archivos\\carreras.json";
+    private String urlResultados="C:\\Users\\alvar\\OneDrive\\Documentos\\Programacion II\\TPI\\TPI\\TPI\\src\\main\\java\\com\\mycompany\\tpi\\archivos\\resultados.json";
+    
+    
+    
+>>>>>>> 6aaf8cadeac30df596e6ae432d9f4168a675906b
     public void menu() {
         int opcion = 0;
         do {
@@ -48,6 +65,7 @@ public class ControladorPrincipal {
             }
         } while (opcion != 0);
     }
+<<<<<<< HEAD
 
     public void baseDatos(){
         try {
@@ -129,5 +147,44 @@ public class ControladorPrincipal {
 
     public void guardarDatos() {
         // conexion a bd y guardar datos en cada tabla
+=======
+    
+    public void registrarCompetidor(){}
+    public void registrarJuez(){}
+    public void registrarCarrera(){}
+    public void registrarTiempoCompetidor(){}
+    public void rankingCategoria(){}
+    public void rankingGeneral(){}
+    public void listaAbandonos(){}
+    public void infoCompetencia(){}
+    public void infoCompetidor(){}
+    
+    public void cargarDatos(){
+       try {
+            competidores = mapper.readValue(new File(urlCompetidores), new TypeReference<>() {
+            });
+            jueces = mapper.readValue(new File(urlJueces), new TypeReference<>() {
+            });
+            carreras = mapper.readValue(new File(urlCarreras), new TypeReference<>() {
+            });
+            resultados = mapper.readValue(new File(urlResultados), new TypeReference<>() {
+            });
+        } catch (Exception e) {
+            System.out.println("Error al cargar archivos: " + e.getMessage());
+        } // conexion a bd y cargar datos en listas
+    }
+    
+    public void guardarDatos(){
+        try {
+            mapper.writerWithDefaultPrettyPrinter().writeValue(new File(urlCompetidores), competidores);
+            mapper.writerWithDefaultPrettyPrinter().writeValue(new File(urlJueces), jueces);
+            mapper.writerWithDefaultPrettyPrinter().writeValue(new File(urlCarreras), carreras);
+            mapper.writerWithDefaultPrettyPrinter().writeValue(new File(urlResultados), resultados);
+        } catch (Exception e) {
+            System.out.println("Error al guardar: " + e.getMessage());
+        }// conexion a bd y guardar datos en cada tabla
+>>>>>>> 6aaf8cadeac30df596e6ae432d9f4168a675906b
     }
 }
+
+
