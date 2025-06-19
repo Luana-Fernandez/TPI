@@ -15,9 +15,8 @@ public class Carrera {
     public Carrera() {
     }
 
-    public Carrera(int idCarrera, String categoria, String horaInicio, String horaFin, String ubicacion, String detalle, int idJuez) {
+    public Carrera(String categoria, String horaInicio, String horaFin, String ubicacion, String detalle, int idJuez) {
 
-        this.idCarrera = idCarrera;
         this.categoria = categoria;
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;

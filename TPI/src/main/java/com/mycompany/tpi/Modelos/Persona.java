@@ -1,24 +1,18 @@
 package com.mycompany.tpi.Modelos;
 
-import java.util.List;
-
-
 public abstract class Persona {
     private int idPersona;
     private String nombre;
     private String apellido;
     private String mail;
-<<<<<<< HEAD
-=======
-    private String categoria;
-    //\\private List<Carrera> carreras[]; 
->>>>>>> 6aaf8cadeac30df596e6ae432d9f4168a675906b
+    private String telefono;
 
-    public Persona(int idPersona, String nombre, String apellido, String mail) {
-        this.idPersona = idPersona;
+    public Persona(String nombre, String apellido, String mail, String telefono) {
+
         this.nombre = nombre;
         this.apellido = apellido;
         this.mail = mail;
+        this.telefono = telefono;
     }
 
    
@@ -53,6 +47,14 @@ public abstract class Persona {
 
     public void setMail(String mail) {
         this.mail = mail;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
     }
 
     @Override
