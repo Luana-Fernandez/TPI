@@ -23,7 +23,7 @@ public class VistaPrincipal {
         return Integer.parseInt(sc.nextLine());
     }
     
-    public String pedirDato(){
+    public String pedirDato(String msj){
         return sc.nextLine();
     }
     

@@ -8,15 +8,12 @@ public abstract class Persona {
     private String nombre;
     private String apellido;
     private String mail;
-    private String categoria;
-    private List<Carrera> carreras[];
 
-    public Persona(int idPersona, String nombre, String apellido, String mail, String categoria) {
+    public Persona(int idPersona, String nombre, String apellido, String mail) {
         this.idPersona = idPersona;
         this.nombre = nombre;
         this.apellido = apellido;
         this.mail = mail;
-        this.categoria = categoria;
     }
 
    
@@ -53,21 +50,8 @@ public abstract class Persona {
         this.mail = mail;
     }
 
-    public String getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
-    }
-
     @Override
     public String toString() {
-        return "Persona{" + "idPersona=" + idPersona + ", nombre=" + nombre + ", apellido=" + apellido + ", mail=" + mail + ", categoria=" + categoria + '}';
+        return "Persona{" + "idPersona=" + idPersona + ", nombre=" + nombre + ", apellido=" + apellido + ", mail=" + mail + '}';
     }
-    
-    
-
-   
-    
 }
