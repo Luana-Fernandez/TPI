@@ -6,17 +6,10 @@ public abstract class Persona {
     private String apellido;
     private String mail;
     private String telefono;
-<<<<<<< HEAD
 
-
-
-    public Persona(int idPersona, String nombre, String apellido, String mail, String telefono) {
-        this.idPersona = idPersona;
-=======
 
     public Persona(String nombre, String apellido, String mail, String telefono) {
 
->>>>>>> 13b42730fcea25f529f3e92d7a5cfc54b4b9f8aa
         this.nombre = nombre;
         this.apellido = apellido;
         this.mail = mail;
