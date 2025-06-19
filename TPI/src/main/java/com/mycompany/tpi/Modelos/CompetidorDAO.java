@@ -1,37 +1,43 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.tpi.Modelos;
 
+import com.mycompany.tpi.vista.VistaPrincipal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
-/**
- *
- * @author Equipo
- */
+
 public class CompetidorDAO {
     
     private Connection conexion;
+    private VistaPrincipal vista = new VistaPrincipal();
 
     public CompetidorDAO(Connection conexion) {
         this.conexion = conexion;
     }
     
-    //int idPersona, String nombre, String apellido, String mail, String categoria)
     public void insertarCompetidor(Competidor competidor) throws SQLException {
-        String sql = "INSERT INTO competidores (nombre, apellido,telefono, mail) VALUES (?, ?, ?, ?)";
-        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+        String sql = "INSERT INTO competidores (nombre, apellido, telefono, email) VALUES (?, ?, ?, ?)";    
+
+        try (PreparedStatement ps = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, competidor.getNombre());
             ps.setString(2, competidor.getApellido());
-            ps.setString(3, competidor.getMail());
-            ps.setString(4, competidor.getCategoria());
+            ps.setString(3, competidor.getTelefono());
+            ps.setString(4, competidor.getMail());
             ps.executeUpdate();
+
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    int idGenerado = rs.getInt(1);
+                    competidor.setIdPersona(idGenerado); // Asignás el ID generado a tu objeto
+                    vista.mensaje("Juez insertado con ID: " + idGenerado);
+                }
+            }
+        } catch (SQLException e) {
+            vista.mensaje("Error al insertar competidor: " + e.getMessage());
         }
     }
-
     // Podés agregar más métodos: actualizarCliente, eliminarCliente, buscarClientePorId, etc.
 
 }

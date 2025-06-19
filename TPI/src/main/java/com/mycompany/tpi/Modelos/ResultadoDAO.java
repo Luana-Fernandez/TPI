@@ -1,13 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.tpi.Modelos;
 
-/**
- *
- * @author Equipo
- */
+
 public class ResultadoDAO {
-    
+    //int idCompetidor, int carrera, String tiempo, String estado, int numCorredor, int faltas
 }
