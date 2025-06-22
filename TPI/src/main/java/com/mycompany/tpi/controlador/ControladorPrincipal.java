@@ -233,6 +233,15 @@ public class ControladorPrincipal {
     } 
 
     public void infoCompetencia() {
+        if (carreras.isEmpty()) {
+        vista.mensaje("No hay carreras registradas.");
+    } else {
+        vista.mensaje("Información de todas las carreras registradas:");
+        for (Carrera c : carreras) {
+            vista.mensaje(c.toString());
+        }
+    }
+
     }
 
     public void infoCompetidor() {
