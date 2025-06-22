@@ -197,18 +197,14 @@ public class ControladorPrincipal {
             return;
         }
         //mostramos los 3 mejores resultados por cada categoria
-        for(Map.Entry<String, List<Resultado>> entry : top3PorCategoria.entrySet()){
+        for (Map.Entry<String, List<Resultado>> entry : top3PorCategoria.entrySet()) {
             vista.mensaje("Categoria: " + entry.getKey()); //nombre de la categoria
             int puesto = 1; //Primer puesto
-            for (Resultado r : entry.getValue()){
+            for (Resultado r : entry.getValue()) {
                 vista.mensaje("° - Competidor ID: " + r.getIdCompetidor() + "| Tiempo: " + r.getTiempoCompetidor());
             }
         }
     }
-
-    
-
-    
 
     public void listaAbandonos() {
     }
@@ -217,6 +213,37 @@ public class ControladorPrincipal {
     }
 
     public void infoCompetidor() {
+        //verificamos que la lista no este vacia
+        if (competidores == null || competidores.isEmpty()) {
+            vista.mensaje("No hay competidores registrados.");
+            return;
+        }
+        int idPersonaBuscado;
+        try {
+            idPersonaBuscado = Integer.parseInt(vista.pedirDato("Ingrese Id del competidor: "));
+        } catch (NumberFormatException e) {
+            vista.mensaje("El ID no es valido.");
+            return;
+        }
+        //Buscamos al competidor
+        Competidor encontrado = null;
+        for (Competidor c : competidores) {
+            if (c.getIdPersona() == idPersonaBuscado) {
+                encontrado = c;
+                break;
+            }
+        }
+        //resultados
+        if (encontrado == null){
+            vista.mensaje("No se encontro ningun competidor con ID: " + idPersonaBuscado);
+            return;
+        }
+        //Mostramos detalles del competidor
+        vista.mensaje("Datos del Competidor");
+        vista.mensaje("Nombre: " + encontrado.getNombre());
+        vista.mensaje("Apellido: " + encontrado.getApellido());
+        vista.mensaje("Email: " + encontrado.getMail());
+        vista.mensaje("Telefono: " + encontrado.getTelefono());
     }
 
     public void cargarDatos() {
