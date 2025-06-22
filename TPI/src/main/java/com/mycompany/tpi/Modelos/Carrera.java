@@ -29,7 +29,7 @@ public class Carrera {
         return idJuez;
     }
 
-    public void stIdJuez(int idJuez) {
+    public void setIdJuez(int idJuez) {
         this.idJuez = idJuez;
     }
 

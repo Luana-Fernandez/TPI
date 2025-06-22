@@ -21,7 +21,7 @@ public class CarreraDAO {
 
         try (PreparedStatement ps = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, carrera.getCategoria());
-            ps.setString(2, carrera.getIdJuez());
+            ps.setInt(2, carrera.getIdJuez());
             ps.setString(3, carrera.getHoraInicio());
             ps.setString(4, carrera.getHoraFin());
             ps.setString(5, carrera.getUbicacion());
@@ -32,7 +32,7 @@ public class CarreraDAO {
                 if (rs.next()) {
                     int idGenerado = rs.getInt(1);
                     carrera.setIdCarrera(idGenerado); // Asignás el ID generado a tu objeto
-                    vista.mensaje("Carrera insertado con ID: " + idGenerado);
+                    vista.mensaje("Carrera insertada con ID: " + idGenerado);
                 }
             }
         } catch (SQLException e) {

@@ -16,6 +16,15 @@ public class Resultado {
         this.numCorredor = numCorredor;
     }
 
+    public Resultado(int idCompetidor, int carrera, String tiempoCompetidor, String estado, int numCorredor, int faltas) {
+        this.idCompetidor = idCompetidor;
+        this.carrera = carrera;
+        this.tiempoCompetidor = tiempoCompetidor;
+        this.estado = estado;
+        this.numCorredor = numCorredor;
+        this.faltas = faltas;
+    }
+    
     public int getIdResultado() {
         return idResultado;
     }
@@ -71,10 +80,9 @@ public class Resultado {
     public void setFaltas(int faltas) {
         this.faltas = faltas;
     }
-    
 
     @Override
     public String toString() {
-        return "Resultado{" + "idCompetidor=" + idCompetidor + ", carrera=" + carrera + ", tiempo=" + tiempo + ", estado=" + estado + "numCorredor=" + numCorredor + "faltas=" + faltas + '}';
+        return "Resultado{" + "idResultado=" + idResultado + ", idCompetidor=" + idCompetidor + ", carrera=" + carrera + ", tiempoCompetidor=" + tiempoCompetidor + ", estado=" + estado + ", numCorredor=" + numCorredor + ", faltas=" + faltas + '}';
     }
 }

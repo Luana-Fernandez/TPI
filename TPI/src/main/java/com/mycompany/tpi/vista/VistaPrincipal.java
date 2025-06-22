@@ -20,10 +20,12 @@ public class VistaPrincipal {
         mensaje("8. Informacion de Competencia");        // datos de la competencia + cantidad de competidores
         mensaje("9. Informacion de Competidor");         // datos de competidor + carrera + categoria + tiempo
         mensaje("0. Salir");
+        mensaje("Opcion: ");
         return Integer.parseInt(sc.nextLine());
     }
     
     public String pedirDato(String msj){
+        System.out.print(msj);
         return sc.nextLine();
     }
     

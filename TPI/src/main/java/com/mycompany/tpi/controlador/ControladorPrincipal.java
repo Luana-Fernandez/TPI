@@ -1,14 +1,19 @@
 package com.mycompany.tpi.controlador;
 
 import com.mycompany.tpi.Modelos.Carrera;
+import com.mycompany.tpi.Modelos.CarreraDAO;
 import com.mycompany.tpi.Modelos.Competidor;
+import com.mycompany.tpi.Modelos.CompetidorDAO;
 import com.mycompany.tpi.Modelos.Juez;
+import com.mycompany.tpi.Modelos.JuezDAO;
 
 import com.mycompany.tpi.Modelos.Resultado;
+import com.mycompany.tpi.Modelos.ResultadoDAO;
 import com.mycompany.tpi.vista.VistaPrincipal;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
 
@@ -19,8 +24,10 @@ public class ControladorPrincipal {
     private List<Juez> jueces = new ArrayList<>();
     private List<Carrera> carreras = new ArrayList<>();
     private List<Resultado> resultados = new ArrayList<>();
+    private Connection con;
 
     public void menu() {
+        baseDatos(); //Establecemos la conexión antes de usarla
         int opcion = 0;
         do {
             opcion = vista.menu();
@@ -48,67 +55,94 @@ public class ControladorPrincipal {
 
             }
         } while (opcion != 0);
+        try {
+            if (con != null && !con.isClosed()) {
+                con.close();
+            }
+        } catch (Exception e) {
+            vista.mensaje("Error al cerrar la conexión: " + e.getMessage());
+        }
     }
 
     public void baseDatos() {
         try {
-            // Cargamos el driver y conectamos con la base de dato invetario
+            // Cargamos el driver y conectamos con la base de dato
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bd_competencia", "root", "Caramelo24:)");
-            Statement stmt = con.createStatement();
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_competencia", "root", "Caramelo24:)");
+            //Statement stmt = con.createStatement(); 
+            //No lo estamos usando xq vamos a usar PreparedStatement
         } catch (Exception e) {
             vista.mensaje("Error de lectura" + e.getMessage());
         }
-    }
+    } 
 
     public void registrarCompetidor() {
-        int idCompetidor = Integer.parseInt(vista.pedirDato("Ingrese ID Competidor: "));
-        int faltas = Integer.parseInt(vista.pedirDato("Ingrese numero de faltas: "));
-        int numeroCorredor = Integer.parseInt(vista.pedirDato("Ingrese numero de competidor: "));
+        //nombre,apellido,mail,telefono
         String nombre = vista.pedirDato("Ingrese nombre: ");
         String apellido = vista.pedirDato("Ingrese apellido: ");
+        String telefono = vista.pedirDato("Ingrese telefono: ");
         String mail = vista.pedirDato("Ingrese mail: ");
-        String categoria = vista.pedirDato("Ingrese categoria (A-B-C): ");
-        Competidor c = new Competidor(idCompetidor, faltas, numeroCorredor, nombre, apellido, mail, categoria);
+        // Creamos el competidor
+        Competidor c = new Competidor(nombre, apellido, mail, telefono);
         competidores.add(c);
-        vista.mensaje("Competidor registrado");
+        // Usamos el DAO
+        CompetidorDAO dao = new CompetidorDAO(con);
+        //try-catch es obligatorio en estos casos con mysql
+        try {
+            dao.insertarCompetidor(c);
+        } catch (SQLException e) {
+            vista.mensaje("Error al insertar competidor: " + e.getMessage());
+        }
     }
 
     public void registrarJuez() {
-        int idJuez = Integer.parseInt(vista.pedirDato("Ingrese numero de juez: "));
         String nombre = vista.pedirDato("Ingrese nombre: ");
         String apellido = vista.pedirDato("Ingrese apellido: ");
         String mail = vista.pedirDato("Ingrese mail: ");
-        String categoria = vista.pedirDato("Ingrese categoria (A-B-C): ");
-        Juez j = new Juez(idJuez, nombre, apellido, mail, categoria);
+        String telefono = vista.pedirDato("Ingrese telefono: ");
+        Juez j = new Juez(nombre, apellido, mail, telefono);
         jueces.add(j);
-        vista.mensaje("Juez registrado");
+        JuezDAO dao = new JuezDAO(con);
+        try {
+            dao.insertarJuez(j);
+        } catch (SQLException e) {
+            vista.mensaje("Error al insertar juez: " + e.getMessage());
+        }
     }
 
     public void registrarCarrera() {
-        int idCarrera = Integer.parseInt(vista.pedirDato("Ingrese ID Carrera: "));
         String categoria = vista.pedirDato("Ingrese categoria de carrera: ");
         String horaInicio = vista.pedirDato("Ingrese hora de inicio: ");
         String horaFin = vista.pedirDato("Ingrese hora fin: ");
         String ubicacion = vista.pedirDato("Ingrese ubicacion: ");
         String detalle = vista.pedirDato("Ingrese detalle: ");
-        Carrera ca = new Carrera(idCarrera, categoria, horaInicio, horaFin, ubicacion, detalle);
+        int idJuez = Integer.parseInt(vista.pedirDato("Ingrese ID Juez: "));
+        Carrera ca = new Carrera(categoria, horaInicio, horaFin, ubicacion, detalle, idJuez);
         carreras.add(ca);
-        vista.mensaje("Carrera registrada");
+        CarreraDAO dao = new CarreraDAO(con);
+        try {
+            dao.insertarCarrera(ca);
+        } catch (SQLException e) {
+            vista.mensaje("Error al insertar carrera: " + e.getMessage());
+        }
     }
 
     public void registrarTiempoCompetidor() {
         int idCompetidor = Integer.parseInt(vista.pedirDato("Ingrese ID Competidor: "));
         int idCarrera = Integer.parseInt(vista.pedirDato("Ingrese ID Carrera: "));
-        String tiempo = vista.pedirDato("Ingrese el tiempo de la carrera: ");
+        String tiempo = vista.pedirDato("Ingrese el tiempo competidor: ");
         String estado = vista.pedirDato("Ingrese estado carrera: ");
-        Resultado r = new Resultado(idCompetidor, idCarrera, tiempo, estado);
+        int numCorredor = Integer.parseInt(vista.pedirDato("Ingrese numero de corredor: "));
+        int faltas = Integer.parseInt(vista.pedirDato("Ingrese numero de faltas: "));
+        Resultado r = new Resultado(idCompetidor, idCarrera, tiempo, estado, numCorredor, faltas);
         resultados.add(r);
+        ResultadoDAO dao = new ResultadoDAO(con);
+        dao.insertarResultado(r);
+        vista.mensaje("Registro exitoso");
     }
 
     public void rankingCategoria() {
-        int idCategoria = Integer.parseInt(vista.pedirDato("Ingrese categoria carrera: "));
-        //Carrera carrerasOrdenadas = new Arraylist
+
 
     }
 
