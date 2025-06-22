@@ -75,7 +75,7 @@ public class ControladorPrincipal {
         } catch (Exception e) {
             vista.mensaje("Error de lectura" + e.getMessage());
         }
-    } 
+    }
 
     public void registrarCompetidor() {
         //nombre,apellido,mail,telefono
@@ -144,40 +144,71 @@ public class ControladorPrincipal {
 
     public void rankingCategoria() {
         //mapa para agrupar resultados por categoria
-        Map<String, List <Resultado>> rankingPorCategoria = new HashMap<>();
+        Map<String, List<Resultado>> rankingPorCategoria = new HashMap<>();
         //recorremos todas las carreras
-        for (Carrera carrera : carreras){
+        for (Carrera carrera : carreras) {
             String categoria = carrera.getCategoria();//sacamos la categoria de la carrera
             int idCarrera = carrera.getIdCarrera();//sacamos el id de la carrera
             //se filtra los resultados con tiempo valido
             List<Resultado> resultadosDeCarrera = resultados.stream()
-                    .filter(r -> r.getCarrera() == idCarrera & r.getTiempoCompetidor()!= null && !r.getTiempoCompetidor().isEmpty())
+                    .filter(r -> r.getCarrera() == idCarrera & r.getTiempoCompetidor() != null && !r.getTiempoCompetidor().isEmpty())
                     .sorted(Comparator.comparing(r -> LocalTime.parse(r.getTiempoCompetidor())))//ordenamos por tiempo (de menor a mayor )
                     .toList();//resultado a lista
             //resultados agregados al mapa por categoria
             rankingPorCategoria.computeIfAbsent(categoria, k -> new ArrayList<>()).addAll(resultadosDeCarrera);
         }
-        
-        if(rankingPorCategoria.isEmpty()){
+
+        if (rankingPorCategoria.isEmpty()) {
             vista.mensaje("No hay datos cargados");
             return;
         }
         //Printeamos el ranking por categoria
-         for (Map.Entry<String, List<Resultado>> entry : rankingPorCategoria.entrySet()) {
-        vista.mensaje("Categoría: " + entry.getKey());//nombre de la categoria
-        int puesto = 1;//contador de puestos
-        for (Resultado r : entry.getValue()) {
-            //datos de competidor por orden
-            vista.mensaje(puesto++ + "° - Competidor ID: " + r.getIdCompetidor() + " | Tiempo: " + r.getTiempoCompetidor());
+        for (Map.Entry<String, List<Resultado>> entry : rankingPorCategoria.entrySet()) {
+            vista.mensaje("Categoría: " + entry.getKey());//nombre de la categoria
+            int puesto = 1;//contador de puestos
+            for (Resultado r : entry.getValue()) {
+                //datos de competidor por orden
+                vista.mensaje(puesto++ + "° - Competidor ID: " + r.getIdCompetidor() + " | Tiempo: " + r.getTiempoCompetidor());
+            }
         }
-    }
-
-        
 
     }
 
     public void rankingGeneral() {
+        //agrupamos por categoria con el MAP
+        Map<String, List<Resultado>> top3PorCategoria = new HashMap<>();
+        //recorremos con el for las carreras agrupadas
+        for (Carrera carrera : carreras) {
+            String categoria = carrera.getCategoria(); //Nombre de carrera
+            int idCarrera = carrera.getIdCarrera(); //Id de carrera
+            //Filtro de resultados con tiempo valido
+            List<Resultado> resultadosDeCarrera = resultados.stream()
+                    .filter(r -> r.getCarrera() == idCarrera && r.getTiempoCompetidor() != null && !r.getTiempoCompetidor().isEmpty())
+                    .sorted(Comparator.comparing(r -> LocalTime.parse(r.getTiempoCompetidor())))//Ordenamos por tiempo ascendente
+                    .limit(3)//dejamos los 3 mejores con menor tiempo
+                    .toList();//convertimos el stream a una lista
+            //Si hay resultados los agregamos al mapa por categoria
+            if (!resultadosDeCarrera.isEmpty()) {
+                top3PorCategoria.computeIfAbsent(categoria, k -> new ArrayList<>()).addAll(resultadosDeCarrera);
+            }
+        }
+        if (top3PorCategoria.isEmpty()) {
+            vista.mensaje("No hay datos cargados");
+            return;
+        }
+        //mostramos los 3 mejores resultados por cada categoria
+        for(Map.Entry<String, List<Resultado>> entry : top3PorCategoria.entrySet()){
+            vista.mensaje("Categoria: " + entry.getKey()); //nombre de la categoria
+            int puesto = 1; //Primer puesto
+            for (Resultado r : entry.getValue()){
+                vista.mensaje("° - Competidor ID: " + r.getIdCompetidor() + "| Tiempo: " + r.getTiempoCompetidor());
+            }
+        }
     }
+
+    
+
+    
 
     public void listaAbandonos() {
     }
