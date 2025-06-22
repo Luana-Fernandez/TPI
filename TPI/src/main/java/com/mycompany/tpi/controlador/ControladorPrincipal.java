@@ -29,6 +29,7 @@ public class ControladorPrincipal {
 
     public void menu() {
         baseDatos(); //Establecemos la conexión antes de usarla
+        cargarListas();
         int opcion = 0;
         do {
             opcion = vista.menu();
@@ -36,13 +37,13 @@ public class ControladorPrincipal {
             switch (opcion) {
 
                 case 1 ->
-                    registrarCompetidor();
+                    registrarCompetidor(); //listo
                 case 2 ->
-                    registrarJuez();
+                    registrarJuez();    // listo
                 case 3 ->
-                    registrarCarrera();
+                    registrarCarrera(); //listo
                 case 4 ->
-                    registrarTiempoCompetidor();
+                    registrarCompetidorEnCarrera();
                 case 5 ->
                     rankingCategoria();
                 case 6 ->
@@ -69,7 +70,7 @@ public class ControladorPrincipal {
         try {
             // Cargamos el driver y conectamos con la base de dato
             Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_competencia", "root", "Caramelo24:)");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_competencia", "root", "33411494");
             //Statement stmt = con.createStatement(); 
             //No lo estamos usando xq vamos a usar PreparedStatement
         } catch (Exception e) {
@@ -90,7 +91,8 @@ public class ControladorPrincipal {
         CompetidorDAO dao = new CompetidorDAO(con);
         //try-catch es obligatorio en estos casos con mysql
         try {
-            dao.insertarCompetidor(c);
+            int id = dao.insertarCompetidor(c);
+            c.setIdPersona(id);
         } catch (SQLException e) {
             vista.mensaje("Error al insertar competidor: " + e.getMessage());
         }
@@ -105,7 +107,7 @@ public class ControladorPrincipal {
         jueces.add(j);
         JuezDAO dao = new JuezDAO(con);
         try {
-            dao.insertarJuez(j);
+            j.setIdPersona(dao.insertarJuez(j));
         } catch (SQLException e) {
             vista.mensaje("Error al insertar juez: " + e.getMessage());
         }
@@ -122,13 +124,13 @@ public class ControladorPrincipal {
         carreras.add(ca);
         CarreraDAO dao = new CarreraDAO(con);
         try {
-            dao.insertarCarrera(ca);
+            ca.setIdCarrera(dao.insertarCarrera(ca));
         } catch (SQLException e) {
             vista.mensaje("Error al insertar carrera: " + e.getMessage());
         }
     }
 
-    public void registrarTiempoCompetidor() {
+    public void registrarCompetidorEnCarrera() {
         int idCompetidor = Integer.parseInt(vista.pedirDato("Ingrese ID Competidor: "));
         int idCarrera = Integer.parseInt(vista.pedirDato("Ingrese ID Carrera: "));
         String tiempo = vista.pedirDato("Ingrese el tiempo competidor: ");
@@ -138,7 +140,7 @@ public class ControladorPrincipal {
         Resultado r = new Resultado(idCompetidor, idCarrera, tiempo, estado, numCorredor, faltas);
         resultados.add(r);
         ResultadoDAO dao = new ResultadoDAO(con);
-        dao.insertarResultado(r);
+        r.setIdResultado(dao.insertarResultado(r));
         vista.mensaje("Registro exitoso");
     }
 
@@ -219,8 +221,18 @@ public class ControladorPrincipal {
     public void infoCompetidor() {
     }
 
-    public void cargarDatos() {
-        // conexion a bd y cargar datos en listas
+    public void cargarListas() {
+        try{
+        CompetidorDAO competidorDAO = new CompetidorDAO(con);
+        competidores = competidorDAO.listaCompetidores();
+        
+            System.out.println(competidores);
+        /*competidores;
+        resultados;
+        carreras;
+        jueces;*/}catch(SQLException e){
+        
+        vista.mensaje("error:"+e.getMessage());}
     }
 
     public void guardarDatos() {

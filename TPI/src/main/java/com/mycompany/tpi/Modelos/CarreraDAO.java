@@ -16,9 +16,9 @@ public class CarreraDAO {
         this.conexion = conexion;
     }
     //int idCarrera, String categoria, String horaInicio, String horaFin, String ubicacion, String detalle, int idJuez
-     public void insertarCarrera(Carrera carrera) throws SQLException {
+     public int insertarCarrera(Carrera carrera) throws SQLException {
         String sql = "INSERT INTO carreras (categoria, idJuez, horaInicio, horaFin, ubicacion, detalleRecorrido) VALUES (?, ?, ?, ?, ?, ?)";    
-
+        int idGenerado=0;
         try (PreparedStatement ps = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, carrera.getCategoria());
             ps.setInt(2, carrera.getIdJuez());
@@ -27,10 +27,10 @@ public class CarreraDAO {
             ps.setString(5, carrera.getUbicacion());
             ps.setString(6, carrera.getDetalle());
             ps.executeUpdate();
-
+            
             try (ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) {
-                    int idGenerado = rs.getInt(1);
+                    idGenerado = rs.getInt(1);
                     carrera.setIdCarrera(idGenerado); // Asignás el ID generado a tu objeto
                     vista.mensaje("Carrera insertada con ID: " + idGenerado);
                 }
@@ -38,6 +38,7 @@ public class CarreraDAO {
         } catch (SQLException e) {
             vista.mensaje("Error al insertar carrera: " + e.getMessage());
         }
+        return idGenerado;
     }
     // Podés agregar más métodos: actualizarCarrera, eliminarCarrera, buscarCarrera, etc.
 

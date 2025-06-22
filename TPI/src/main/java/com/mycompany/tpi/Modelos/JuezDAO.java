@@ -16,9 +16,9 @@ public class JuezDAO {
         this.conexion = conexion;
     }
     
-    public void insertarJuez(Juez juez) throws SQLException {
+    public int insertarJuez(Juez juez) throws SQLException {
         String sql = "INSERT INTO jueces (nombre, apellido, telefono, email) VALUES (?, ?, ?, ?)";    
-
+        int idGenerado=0;
         try (PreparedStatement ps = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, juez.getNombre());
             ps.setString(2, juez.getApellido());
@@ -28,7 +28,7 @@ public class JuezDAO {
 
             try (ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) {
-                    int idGenerado = rs.getInt(1);
+                    idGenerado = rs.getInt(1);
                     juez.setIdPersona(idGenerado); // Asignás el ID generado a tu objeto
                     vista.mensaje("Juez insertado con ID: " + idGenerado);
                 }
@@ -36,6 +36,7 @@ public class JuezDAO {
         } catch (SQLException e) {
             vista.mensaje("Error al insertar juez: " + e.getMessage());
         }
+        return idGenerado;
     }
     // Podés agregar más métodos: actualizarCliente, eliminarCliente, buscarClientePorId, etc.
     

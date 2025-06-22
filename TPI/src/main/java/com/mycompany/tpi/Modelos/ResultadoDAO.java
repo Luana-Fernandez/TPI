@@ -16,9 +16,9 @@ public class ResultadoDAO {
         this.conexion = conexion;
     }
 
-    public void insertarResultado(Resultado resultado) {
+    public int insertarResultado(Resultado resultado) {
         String sql = "INSERT INTO resultados (idCompetidor, idCarrera, tiempoCompetidor, estado, numeroCorredor, faltas) VALUES (?, ?, ?, ?, ?, ?)";
-
+        int idGenerado=0;
         try (PreparedStatement ps = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, resultado.getIdCompetidor());
             ps.setInt(2, resultado.getCarrera());
@@ -30,13 +30,15 @@ public class ResultadoDAO {
 
             try (ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) {
-                    int idGenerado = rs.getInt(1);
+                    idGenerado = rs.getInt(1);
                     resultado.setIdResultado(idGenerado);
                     vista.mensaje("Resultado registrado con ID: " + idGenerado);
+                    return idGenerado;
                 }
             }
         } catch (SQLException e) {
             vista.mensaje("Error al insertar resultado: " + e.getMessage());
         }
+        return idGenerado;
     }
 }
