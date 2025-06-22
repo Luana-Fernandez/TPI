@@ -207,7 +207,26 @@ public class ControladorPrincipal {
     }
 
     public void listaAbandonos() {
+         List<Resultado> abandonos = new ArrayList<>();
+
+    for (Resultado r : resultados) {
+        if ("abandono".equalsIgnoreCase(r.getEstado())) {
+            abandonos.add(r);
+            }
+
+        }
+    
+    if (abandonos.isEmpty()) {
+    vista.mensaje("No hay abandonos registrados.");
+    }       
+    else {
+    vista.mensaje("Listado de competidores que abandonaron:");
+    for (Resultado r : abandonos) {
+        vista.mensaje(r.toString());
+        }
     }
+
+    } 
 
     public void infoCompetencia() {
     }
