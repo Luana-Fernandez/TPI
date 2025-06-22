@@ -199,44 +199,102 @@ public class ControladorPrincipal {
             return;
         }
         //mostramos los 3 mejores resultados por cada categoria
-        for(Map.Entry<String, List<Resultado>> entry : top3PorCategoria.entrySet()){
+        for (Map.Entry<String, List<Resultado>> entry : top3PorCategoria.entrySet()) {
             vista.mensaje("Categoria: " + entry.getKey()); //nombre de la categoria
             int puesto = 1; //Primer puesto
-            for (Resultado r : entry.getValue()){
+            for (Resultado r : entry.getValue()) {
                 vista.mensaje("° - Competidor ID: " + r.getIdCompetidor() + "| Tiempo: " + r.getTiempoCompetidor());
             }
         }
     }
 
-    
-
-    
-
     public void listaAbandonos() {
+        List<Resultado> abandonos = new ArrayList<>();
+
+        for (Resultado r : resultados) {
+            if ("abandono".equalsIgnoreCase(r.getEstado())) {
+                abandonos.add(r);
+            }
+
+        }
+
+        if (abandonos.isEmpty()) {
+            vista.mensaje("No hay abandonos registrados.");
+        } else {
+            vista.mensaje("Listado de competidores que abandonaron:");
+            for (Resultado r : abandonos) {
+                vista.mensaje(r.toString());
+            }
+        }
+
     }
 
     public void infoCompetencia() {
+        if (carreras.isEmpty()) {
+            vista.mensaje("No hay carreras registradas.");
+        } else {
+            vista.mensaje("Información de todas las carreras registradas:");
+            for (Carrera c : carreras) {
+                vista.mensaje(c.toString());
+            }
+        }
+
     }
 
     public void infoCompetidor() {
+        //verificamos que la lista no este vacia
+        if (competidores == null || competidores.isEmpty()) {
+            vista.mensaje("No hay competidores registrados.");
+            return;
+        }
+        int idPersonaBuscado;
+        try {
+            idPersonaBuscado = Integer.parseInt(vista.pedirDato("Ingrese Id del competidor: "));
+        } catch (NumberFormatException e) {
+            vista.mensaje("El ID no es valido.");
+            return;
+        }
+        //Buscamos al competidor
+        Competidor encontrado = null;
+        for (Competidor c : competidores) {
+            if (c.getIdPersona() == idPersonaBuscado) {
+                encontrado = c;
+                break;
+            }
+        }
+        //resultados
+        if (encontrado == null) {
+            vista.mensaje("No se encontro ningun competidor con ID: " + idPersonaBuscado);
+            return;
+        }
+        //Mostramos detalles del competidor
+        vista.mensaje("Datos del Competidor");
+        vista.mensaje("Nombre: " + encontrado.getNombre());
+        vista.mensaje("Apellido: " + encontrado.getApellido());
+        vista.mensaje("Email: " + encontrado.getMail());
+        vista.mensaje("Telefono: " + encontrado.getTelefono());
     }
 
     public void cargarListas() {
-        try{
-        CompetidorDAO competidorDAO = new CompetidorDAO(con);
-        competidores = competidorDAO.listaCompetidores();
-        
-            System.out.println(competidores);
-        /*competidores;
-        resultados;
-        carreras;
-        jueces;*/}catch(SQLException e){
-        
-        vista.mensaje("error:"+e.getMessage());}
-    }
+        try {
+            CompetidorDAO competidorDAO = new CompetidorDAO(con);
+            competidores = competidorDAO.listaCompetidores();
+            CarreraDAO carreraDAO = new CarreraDAO(con);
+            carreras = carreraDAO.listaCarreras();
+            JuezDAO juezDAO = new JuezDAO(con);
+            jueces = juezDAO.listaJueces();
+            ResultadoDAO resultadoDAO = new ResultadoDAO(con);
+            resultados= resultadoDAO.listaResultados();
+            /*
+                VER CONTENIDO DE LAS LISTAS
+            vista.mensaje(competidores.toString());
+            vista.mensaje(carreras.toString());
+            vista.mensaje(jueces.toString());
+            vista.mensaje(resultados.toString());*/
 
-    public void guardarDatos() {
-    }
-    // conexion a bd y guardar datos en cada tabla
+        } catch (SQLException e) {
 
+            vista.mensaje("error:" + e.getMessage());
+        }
+    }
 }

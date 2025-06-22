@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.*;
 
 
 public class CarreraDAO {
@@ -42,4 +43,27 @@ public class CarreraDAO {
     }
     // Podés agregar más métodos: actualizarCarrera, eliminarCarrera, buscarCarrera, etc.
 
+        public List<Carrera> listaCarreras() throws SQLException {
+        String sql = "SELECT * FROM carreras";    
+        PreparedStatement ps = conexion.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+        System.out.println(rs);
+        String[] lista= new String[7];
+        
+        List<Carrera> listaCarreras = new ArrayList<>();
+        while (rs.next()){
+            lista[0]=rs.getString("idCarrera");
+            lista[1]=rs.getString("categoria");
+            lista[2]=rs.getString("horaInicio");
+            lista[3]=rs.getString("horaFin");
+            lista[4]=rs.getString("ubicacion");  
+            lista[5]=rs.getString("detalleRecorrido"); 
+            lista[6]=rs.getString("idJuez"); 
+            Carrera c = new Carrera(lista[1],lista[2],lista[3],lista[4],lista[5],Integer.parseInt(lista[6]));
+            c.setIdCarrera(Integer.parseInt(lista[0]));
+            listaCarreras.add(c);
+            }
+        
+        return listaCarreras;
+        }
 }
