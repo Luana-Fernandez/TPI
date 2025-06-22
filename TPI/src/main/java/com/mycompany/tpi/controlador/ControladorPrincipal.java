@@ -15,6 +15,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalTime;
 import java.util.*;
 
 public class ControladorPrincipal {
@@ -142,7 +143,36 @@ public class ControladorPrincipal {
     }
 
     public void rankingCategoria() {
+        //mapa para agrupar resultados por categoria
+        Map<String, List <Resultado>> rankingPorCategoria = new HashMap<>();
+        //recorremos todas las carreras
+        for (Carrera carrera : carreras){
+            String categoria = carrera.getCategoria();//sacamos la categoria de la carrera
+            int idCarrera = carrera.getIdCarrera();//sacamos el id de la carrera
+            //se filtra los resultados con tiempo valido
+            List<Resultado> resultadosDeCarrera = resultados.stream()
+                    .filter(r -> r.getCarrera() == idCarrera & r.getTiempoCompetidor()!= null && !r.getTiempoCompetidor().isEmpty())
+                    .sorted(Comparator.comparing(r -> LocalTime.parse(r.getTiempoCompetidor())))//ordenamos por tiempo (de menor a mayor )
+                    .toList();//resultado a lista
+            //resultados agregados al mapa por categoria
+            rankingPorCategoria.computeIfAbsent(categoria, k -> new ArrayList<>()).addAll(resultadosDeCarrera);
+        }
+        
+        if(rankingPorCategoria.isEmpty()){
+            vista.mensaje("No hay datos cargados");
+            return;
+        }
+        //Printeamos el ranking por categoria
+         for (Map.Entry<String, List<Resultado>> entry : rankingPorCategoria.entrySet()) {
+        vista.mensaje("Categoría: " + entry.getKey());//nombre de la categoria
+        int puesto = 1;//contador de puestos
+        for (Resultado r : entry.getValue()) {
+            //datos de competidor por orden
+            vista.mensaje(puesto++ + "° - Competidor ID: " + r.getIdCompetidor() + " | Tiempo: " + r.getTiempoCompetidor());
+        }
+    }
 
+        
 
     }
 
