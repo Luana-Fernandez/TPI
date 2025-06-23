@@ -1,3 +1,4 @@
+
 package com.mycompany.tpi.controlador;
 
 import com.mycompany.tpi.Modelos.Carrera;
@@ -17,6 +18,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalTime;
 import java.util.*;
+
 
 public class ControladorPrincipal {
 
@@ -157,24 +159,42 @@ public class ControladorPrincipal {
                     .sorted(Comparator.comparing(Resultado::getTiempoCompetidor))//ordenamos por tiempo (de menor a mayor )
                     .toList();//resultado a lista
             //resultados agregados al mapa por categoria
-            rankingPorCategoria.computeIfAbsent(categoria, k -> new ArrayList<>()).addAll(resultadosDeCarrera);
+            if (!resultadosDeCarrera.isEmpty()) {
+                rankingPorCategoria.computeIfAbsent(categoria, k -> new ArrayList<>()).addAll(resultadosDeCarrera);
+            }
         }
-
         if (rankingPorCategoria.isEmpty()) {
             vista.mensaje("No hay datos cargados");
             return;
         }
-        //Printeamos el ranking por categoria
-        for (Map.Entry<String, List<Resultado>> entry : rankingPorCategoria.entrySet()) {
-            vista.mensaje("Categoría: " + entry.getKey());//nombre de la categoria
+        //Categorias disponibles
+        vista.mensaje("Categorias: ");
+        List<String> categorias = new ArrayList<>(rankingPorCategoria.keySet());
+        for (int i = 0; i <categorias.size(); i++){
+            vista.mensaje((i + 1) + "." + categorias.get(i));
+        }
+        //Seleccion de categoria
+        int opcion;
+        try{
+            opcion= Integer.parseInt(vista.pedirDato("Seleccione el numero de la categoria: "))-1;
+            if (opcion <0 || opcion >= categorias.size()){
+                vista.mensaje("Opcion invalida.");
+                return;
+            }
+        }catch (NumberFormatException e){
+            vista.mensaje("Entrada no valida.");
+            return;
+        }
+        String categoriaSeleccionada = categorias.get(opcion);
+        vista.mensaje("Categoria: " + categoriaSeleccionada);
+        //Mostrar rankind de la categoria
+        List<Resultado> resultados = rankingPorCategoria.get(categoriaSeleccionada);
             int puesto = 1;//contador de puestos
-            for (Resultado r : entry.getValue()) {
+            for (Resultado r : resultados) {
                 //datos de competidor por orden
                 vista.mensaje(puesto++ + "° - Competidor ID: " + r.getIdCompetidor() + " | Tiempo: " + r.getTiempoCompetidor());
             }
         }
-
-    }
 
     public void rankingGeneral() {
         //agrupamos por categoria con el MAP
@@ -284,7 +304,7 @@ public class ControladorPrincipal {
             JuezDAO juezDAO = new JuezDAO(con);
             jueces = juezDAO.listaJueces();
             ResultadoDAO resultadoDAO = new ResultadoDAO(con);
-            resultados= resultadoDAO.listaResultados();
+            resultados = resultadoDAO.listaResultados();
             /*
                 VER CONTENIDO DE LAS LISTAS
             vista.mensaje(competidores.toString());
