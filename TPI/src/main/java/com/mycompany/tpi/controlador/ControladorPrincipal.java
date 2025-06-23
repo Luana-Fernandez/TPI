@@ -29,6 +29,7 @@ public class ControladorPrincipal {
 
     public void menu() {
         baseDatos(); //Establecemos la conexión antes de usarla
+        cargarListas();
         int opcion = 0;
         do {
             opcion = vista.menu();
@@ -36,13 +37,13 @@ public class ControladorPrincipal {
             switch (opcion) {
 
                 case 1 ->
-                    registrarCompetidor();
+                    registrarCompetidor(); //listo
                 case 2 ->
-                    registrarJuez();
+                    registrarJuez();    // listo
                 case 3 ->
-                    registrarCarrera();
+                    registrarCarrera(); //listo
                 case 4 ->
-                    registrarTiempoCompetidor();
+                    registrarCompetidorEnCarrera();
                 case 5 ->
                     rankingCategoria();
                 case 6 ->
@@ -69,7 +70,7 @@ public class ControladorPrincipal {
         try {
             // Cargamos el driver y conectamos con la base de dato
             Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_competencia", "root", "Caramelo24:)");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_competencia", "root", "33411494");
             //Statement stmt = con.createStatement(); 
             //No lo estamos usando xq vamos a usar PreparedStatement
         } catch (Exception e) {
@@ -90,7 +91,8 @@ public class ControladorPrincipal {
         CompetidorDAO dao = new CompetidorDAO(con);
         //try-catch es obligatorio en estos casos con mysql
         try {
-            dao.insertarCompetidor(c);
+            int id = dao.insertarCompetidor(c);
+            c.setIdPersona(id);
         } catch (SQLException e) {
             vista.mensaje("Error al insertar competidor: " + e.getMessage());
         }
@@ -105,7 +107,7 @@ public class ControladorPrincipal {
         jueces.add(j);
         JuezDAO dao = new JuezDAO(con);
         try {
-            dao.insertarJuez(j);
+            j.setIdPersona(dao.insertarJuez(j));
         } catch (SQLException e) {
             vista.mensaje("Error al insertar juez: " + e.getMessage());
         }
@@ -122,13 +124,13 @@ public class ControladorPrincipal {
         carreras.add(ca);
         CarreraDAO dao = new CarreraDAO(con);
         try {
-            dao.insertarCarrera(ca);
+            ca.setIdCarrera(dao.insertarCarrera(ca));
         } catch (SQLException e) {
             vista.mensaje("Error al insertar carrera: " + e.getMessage());
         }
     }
 
-    public void registrarTiempoCompetidor() {
+    public void registrarCompetidorEnCarrera() {
         int idCompetidor = Integer.parseInt(vista.pedirDato("Ingrese ID Competidor: "));
         int idCarrera = Integer.parseInt(vista.pedirDato("Ingrese ID Carrera: "));
         String tiempo = vista.pedirDato("Ingrese el tiempo competidor: ");
@@ -138,7 +140,7 @@ public class ControladorPrincipal {
         Resultado r = new Resultado(idCompetidor, idCarrera, tiempo, estado, numCorredor, faltas);
         resultados.add(r);
         ResultadoDAO dao = new ResultadoDAO(con);
-        dao.insertarResultado(r);
+        r.setIdResultado(dao.insertarResultado(r));
         vista.mensaje("Registro exitoso");
     }
 
@@ -207,36 +209,35 @@ public class ControladorPrincipal {
     }
 
     public void listaAbandonos() {
-         List<Resultado> abandonos = new ArrayList<>();
+        List<Resultado> abandonos = new ArrayList<>();
 
-    for (Resultado r : resultados) {
-        if ("abandono".equalsIgnoreCase(r.getEstado())) {
-            abandonos.add(r);
+        for (Resultado r : resultados) {
+            if ("abandono".equalsIgnoreCase(r.getEstado())) {
+                abandonos.add(r);
             }
 
         }
-    
-    if (abandonos.isEmpty()) {
-    vista.mensaje("No hay abandonos registrados.");
-    }       
-    else {
-    vista.mensaje("Listado de competidores que abandonaron:");
-    for (Resultado r : abandonos) {
-        vista.mensaje(r.toString());
-        }
-    }
 
-    } 
+        if (abandonos.isEmpty()) {
+            vista.mensaje("No hay abandonos registrados.");
+        } else {
+            vista.mensaje("Listado de competidores que abandonaron:");
+            for (Resultado r : abandonos) {
+                vista.mensaje(r.toString());
+            }
+        }
+
+    }
 
     public void infoCompetencia() {
         if (carreras.isEmpty()) {
-        vista.mensaje("No hay carreras registradas.");
-    } else {
-        vista.mensaje("Información de todas las carreras registradas:");
-        for (Carrera c : carreras) {
-            vista.mensaje(c.toString());
+            vista.mensaje("No hay carreras registradas.");
+        } else {
+            vista.mensaje("Información de todas las carreras registradas:");
+            for (Carrera c : carreras) {
+                vista.mensaje(c.toString());
+            }
         }
-    }
 
     }
 
@@ -262,7 +263,7 @@ public class ControladorPrincipal {
             }
         }
         //resultados
-        if (encontrado == null){
+        if (encontrado == null) {
             vista.mensaje("No se encontro ningun competidor con ID: " + idPersonaBuscado);
             return;
         }
@@ -274,12 +275,26 @@ public class ControladorPrincipal {
         vista.mensaje("Telefono: " + encontrado.getTelefono());
     }
 
-    public void cargarDatos() {
-        // conexion a bd y cargar datos en listas
-    }
+    public void cargarListas() {
+        try {
+            CompetidorDAO competidorDAO = new CompetidorDAO(con);
+            competidores = competidorDAO.listaCompetidores();
+            CarreraDAO carreraDAO = new CarreraDAO(con);
+            carreras = carreraDAO.listaCarreras();
+            JuezDAO juezDAO = new JuezDAO(con);
+            jueces = juezDAO.listaJueces();
+            ResultadoDAO resultadoDAO = new ResultadoDAO(con);
+            resultados= resultadoDAO.listaResultados();
+            /*
+                VER CONTENIDO DE LAS LISTAS
+            vista.mensaje(competidores.toString());
+            vista.mensaje(carreras.toString());
+            vista.mensaje(jueces.toString());
+            vista.mensaje(resultados.toString());*/
 
-    public void guardarDatos() {
-    }
-    // conexion a bd y guardar datos en cada tabla
+        } catch (SQLException e) {
 
+            vista.mensaje("error:" + e.getMessage());
+        }
+    }
 }

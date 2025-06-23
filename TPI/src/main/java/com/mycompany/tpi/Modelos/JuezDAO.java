@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.*;
 
 public class JuezDAO {
 
@@ -16,9 +17,9 @@ public class JuezDAO {
         this.conexion = conexion;
     }
     
-    public void insertarJuez(Juez juez) throws SQLException {
+    public int insertarJuez(Juez juez) throws SQLException {
         String sql = "INSERT INTO jueces (nombre, apellido, telefono, email) VALUES (?, ?, ?, ?)";    
-
+        int idGenerado=0;
         try (PreparedStatement ps = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, juez.getNombre());
             ps.setString(2, juez.getApellido());
@@ -28,7 +29,7 @@ public class JuezDAO {
 
             try (ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) {
-                    int idGenerado = rs.getInt(1);
+                    idGenerado = rs.getInt(1);
                     juez.setIdPersona(idGenerado); // Asignás el ID generado a tu objeto
                     vista.mensaje("Juez insertado con ID: " + idGenerado);
                 }
@@ -36,7 +37,28 @@ public class JuezDAO {
         } catch (SQLException e) {
             vista.mensaje("Error al insertar juez: " + e.getMessage());
         }
+        return idGenerado;
     }
     // Podés agregar más métodos: actualizarCliente, eliminarCliente, buscarClientePorId, etc.
-    
+        public List<Juez> listaJueces() throws SQLException {
+        String sql = "SELECT * FROM jueces";    
+        PreparedStatement ps = conexion.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+        System.out.println(rs);
+        String[] lista= new String[5];
+        
+        List<Juez> listaJueces = new ArrayList<>();
+        while (rs.next()){
+            lista[0]=rs.getString("idJuez");
+            lista[1]=rs.getString("nombre");
+            lista[2]=rs.getString("apellido");
+            lista[3]=rs.getString("email");
+            lista[4]=rs.getString("telefono");   
+            Juez j = new Juez(lista[1],lista[2],lista[3],lista[4]);
+            j.setIdPersona(Integer.parseInt(lista[0]));
+            listaJueces.add(j);
+            }
+        
+        return listaJueces;
+        }
 }

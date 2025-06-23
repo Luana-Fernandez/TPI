@@ -6,4 +6,8 @@ public class Competidor extends Persona{
         super(nombre,apellido,mail,telefono);
     }
     
+    @Override
+    public String toString() {
+        return "Competidor: "+this.getNombre()+" "+this.getApellido();
+    }
 }

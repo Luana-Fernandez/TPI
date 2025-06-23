@@ -13,7 +13,7 @@ public class VistaPrincipal {
         mensaje("1. Registrar Competidor");
         mensaje("2. Registrar Juez");
         mensaje("3. Registrar Carrera");
-        mensaje("4. Registrar Tiempo de Competidor");
+        mensaje("4. Registrar Competidor en Carrera");
         mensaje("5. Ranking de Tiempos de Categoria");   // por categoria
         mensaje("6. Ranking de Tiempos Generales");      // de toda la competencia
         mensaje("7. Lista de Abandonos");
