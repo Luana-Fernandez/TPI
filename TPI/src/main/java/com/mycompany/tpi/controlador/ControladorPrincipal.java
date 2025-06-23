@@ -154,7 +154,7 @@ public class ControladorPrincipal {
             //se filtra los resultados con tiempo valido
             List<Resultado> resultadosDeCarrera = resultados.stream()
                     .filter(r -> r.getCarrera() == idCarrera & r.getTiempoCompetidor() != null && !r.getTiempoCompetidor().isEmpty())
-                    .sorted(Comparator.comparing(r -> LocalTime.parse(r.getTiempoCompetidor())))//ordenamos por tiempo (de menor a mayor )
+                    .sorted(Comparator.comparing(Resultado::getTiempoCompetidor))//ordenamos por tiempo (de menor a mayor )//ordenamos por tiempo (de menor a mayor )
                     .toList();//resultado a lista
             //resultados agregados al mapa por categoria
             rankingPorCategoria.computeIfAbsent(categoria, k -> new ArrayList<>()).addAll(resultadosDeCarrera);
