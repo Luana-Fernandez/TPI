@@ -10,6 +10,9 @@ public class Resultado {
     private int numCorredor;
     private int faltas;
 
+    public Resultado() {
+    }
+    
     public Resultado(int idCompetidor, int carrera, int numCorredor) {
         this.idCompetidor = idCompetidor;
         this.carrera = carrera;

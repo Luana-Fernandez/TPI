@@ -13,6 +13,9 @@ public class ResultadoDAO {
     private Connection conexion;
     private VistaPrincipal vista = new VistaPrincipal();
 
+    public ResultadoDAO() {
+    }
+    
     public ResultadoDAO(Connection conexion) {
         this.conexion = conexion;
     }

@@ -13,6 +13,9 @@ public class JuezDAO {
     private Connection conexion;
     private VistaPrincipal vista = new VistaPrincipal();
 
+    public JuezDAO() {
+    }
+    
     public JuezDAO(Connection conexion) {
         this.conexion = conexion;
     }

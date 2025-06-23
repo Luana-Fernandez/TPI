@@ -13,6 +13,9 @@ public class CarreraDAO {
     private Connection conexion;
     private VistaPrincipal vista = new VistaPrincipal();
 
+    public CarreraDAO() {
+    }
+    
     public CarreraDAO(Connection conexion) {
         this.conexion = conexion;
     }

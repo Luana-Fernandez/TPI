@@ -14,6 +14,9 @@ public class CompetidorDAO {
     private Connection conexion;
     private VistaPrincipal vista = new VistaPrincipal();
 
+    public CompetidorDAO() {
+    }
+    
     public CompetidorDAO(Connection conexion) {
         this.conexion = conexion;
     }
