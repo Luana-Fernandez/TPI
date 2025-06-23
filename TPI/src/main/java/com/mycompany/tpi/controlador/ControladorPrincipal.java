@@ -37,7 +37,15 @@ public class ControladorPrincipal {
             opcion = vista.menu();
 
             switch (opcion) {
-
+                    /* agregar:
+                        -Info jueces
+                        -registrar Hora finalizacion de carrera
+                        -registrar hora de competidor
+                        -registrar falta
+                        
+                        -ver si falta algo mas
+                    
+                */
                 case 1 ->
                     registrarCompetidor(); //listo
                 case 2 ->
