@@ -30,6 +30,7 @@ public class CompetidorDAO {
             ps.setString(2, competidor.getApellido());
             ps.setString(3, competidor.getTelefono());
             ps.setString(4, competidor.getMail());
+            ps.setInt(5, competidor.getDni());
             ps.executeUpdate();
 
             try (ResultSet rs = ps.getGeneratedKeys()) {
@@ -52,7 +53,7 @@ public class CompetidorDAO {
         PreparedStatement ps = conexion.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
         System.out.println(rs);
-        String[] lista= new String[5];
+        String[] lista= new String[6];
         
         List<Competidor> listaCompetidores = new ArrayList<>();
         while (rs.next()){
@@ -61,7 +62,8 @@ public class CompetidorDAO {
             lista[2]=rs.getString("apellido");
             lista[3]=rs.getString("email");
             lista[4]=rs.getString("telefono");   
-            Competidor c = new Competidor(lista[1],lista[2],lista[3],lista[4]);
+            lista[5]=rs.getString("dni");
+            Competidor c = new Competidor(lista[1],lista[2],lista[3],lista[4],Integer.parseInt(lista[5]));
             c.setIdPersona(Integer.parseInt(lista[0]));
             listaCompetidores.add(c);
             }

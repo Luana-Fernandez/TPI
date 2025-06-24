@@ -6,17 +6,26 @@ public abstract class Persona {
     private String apellido;
     private String mail;
     private String telefono;
+    private int dni;
 
 
-    public Persona(String nombre, String apellido, String mail, String telefono) {
+    public Persona(String nombre, String apellido, String mail, String telefono, int dni) {
 
         this.nombre = nombre;
         this.apellido = apellido;
         this.mail = mail;
         this.telefono = telefono;
+        this.dni = dni;
     }
 
-   
+    public int getDni() {
+        return dni;
+    }
+
+    public void setDni(int dni) {
+        this.dni = dni;
+    }
+
 
     public int getIdPersona() {
         return idPersona;

@@ -28,6 +28,7 @@ public class JuezDAO {
             ps.setString(2, juez.getApellido());
             ps.setString(3, juez.getTelefono());
             ps.setString(4, juez.getMail());
+            ps.setInt(5,juez.getDni());
             ps.executeUpdate();
 
             try (ResultSet rs = ps.getGeneratedKeys()) {
@@ -48,7 +49,7 @@ public class JuezDAO {
         PreparedStatement ps = conexion.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
         System.out.println(rs);
-        String[] lista= new String[5];
+        String[] lista= new String[6];
         
         List<Juez> listaJueces = new ArrayList<>();
         while (rs.next()){
@@ -57,7 +58,8 @@ public class JuezDAO {
             lista[2]=rs.getString("apellido");
             lista[3]=rs.getString("email");
             lista[4]=rs.getString("telefono");   
-            Juez j = new Juez(lista[1],lista[2],lista[3],lista[4]);
+            lista[5]=rs.getString("dni");
+            Juez j = new Juez(lista[1],lista[2],lista[3],lista[4],Integer.parseInt(lista[5]));
             j.setIdPersona(Integer.parseInt(lista[0]));
             listaJueces.add(j);
             }

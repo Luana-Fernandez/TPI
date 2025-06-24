@@ -37,15 +37,6 @@ public class ControladorPrincipal {
             opcion = vista.menu();
 
             switch (opcion) {
-                    /* agregar:
-                        -Info jueces
-                        -registrar Hora finalizacion de carrera
-                        -registrar hora de competidor
-                        -registrar falta
-                        
-                        -ver si falta algo mas
-                    
-                */
                 case 1 ->
                     registrarCompetidor(); //listo
                 case 2 ->
@@ -64,6 +55,16 @@ public class ControladorPrincipal {
                     infoCompetencia();
                 case 9 ->
                     infoCompetidor();
+                    
+                // nuevo
+                case 10 ->
+                    listarJueces();
+                case 11 ->
+                    registrarTiempoCorredor();
+                case 12->
+                    registrarHoraFinCarrera();
+                case 13->
+                    registrarFaltas();
 
             }
         } while (opcion != 0);
@@ -94,8 +95,9 @@ public class ControladorPrincipal {
         String apellido = vista.pedirDato("Ingrese apellido: ");
         String telefono = vista.pedirDato("Ingrese telefono: ");
         String mail = vista.pedirDato("Ingrese mail: ");
+        int dni = Integer.parseInt(vista.pedirDato("Ingrese DNI: "));
         // Creamos el competidor
-        Competidor c = new Competidor(nombre, apellido, mail, telefono);
+        Competidor c = new Competidor(nombre, apellido, mail, telefono,dni);
         competidores.add(c);
         // Usamos el DAO
         CompetidorDAO dao = new CompetidorDAO(con);
@@ -113,7 +115,8 @@ public class ControladorPrincipal {
         String apellido = vista.pedirDato("Ingrese apellido: ");
         String mail = vista.pedirDato("Ingrese mail: ");
         String telefono = vista.pedirDato("Ingrese telefono: ");
-        Juez j = new Juez(nombre, apellido, mail, telefono);
+        int dni = Integer.parseInt(vista.pedirDato("Ingresar DNI: "));
+        Juez j = new Juez(nombre, apellido, mail, telefono,dni);
         jueces.add(j);
         JuezDAO dao = new JuezDAO(con);
         try {
@@ -143,7 +146,7 @@ public class ControladorPrincipal {
     public void registrarCompetidorEnCarrera() {
         int idCompetidor = Integer.parseInt(vista.pedirDato("Ingrese ID Competidor: "));
         int idCarrera = Integer.parseInt(vista.pedirDato("Ingrese ID Carrera: "));
-        String tiempo = vista.pedirDato("Ingrese el tiempo competidor: ");
+        String tiempo = vista.pedirDato("Ingrese el tiempo competidor (formato 00:00): ");
         String estado = vista.pedirDato("Ingrese estado carrera: ");
         int numCorredor = Integer.parseInt(vista.pedirDato("Ingrese numero de corredor: "));
         int faltas = Integer.parseInt(vista.pedirDato("Ingrese numero de faltas: "));
@@ -302,6 +305,12 @@ public class ControladorPrincipal {
         vista.mensaje("Email: " + encontrado.getMail());
         vista.mensaje("Telefono: " + encontrado.getTelefono());
     }
+    
+                    public void registrarTiempoCorredor(){}
+          
+                    public void registrarHoraFinCarrera(){}
+        
+                    public void registrarFaltas(){}
 
     public void cargarListas() {
         try {
@@ -314,12 +323,12 @@ public class ControladorPrincipal {
             ResultadoDAO resultadoDAO = new ResultadoDAO(con);
             resultados = resultadoDAO.listaResultados();
             /*
-                VER CONTENIDO DE LAS LISTAS
+                //VER CONTENIDO DE LAS LISTAS
             vista.mensaje(competidores.toString());
             vista.mensaje(carreras.toString());
             vista.mensaje(jueces.toString());
-            vista.mensaje(resultados.toString());*/
-
+            vista.mensaje(resultados.toString());
+            */
         } catch (SQLException e) {
 
             vista.mensaje("error:" + e.getMessage());
