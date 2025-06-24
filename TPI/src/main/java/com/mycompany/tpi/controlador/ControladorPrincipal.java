@@ -346,8 +346,22 @@ public class ControladorPrincipal {
     }
 
     public void registrarFaltas() {
-        
-    }
+    int dni = Integer.parseInt(vista.pedirDato("Ingrese DNI del Corredor: "));
+    int faltas = Integer.parseInt(vista.pedirDato("Ingrese faltas del Corredor: "));
+
+    for (Competidor competidor : competidores) {
+        if (competidor.getDni() == dni) {
+            for (Resultado resultado : resultados) {
+                if (resultado.getIdCompetidor() == competidor.getIdPersona()) {
+                    resultado.setFaltas(faltas);
+                    ResultadoDAO dao = new ResultadoDAO(con);
+                    int idCompetidor = competidor.getIdPersona();
+                    dao.registrarFaltas(idCompetidor, faltas);
+                }
+            }
+        }
+    }   
+  }
 
     public void cargarListas() {
         try {

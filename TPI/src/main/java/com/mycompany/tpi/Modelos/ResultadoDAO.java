@@ -83,4 +83,16 @@ public class ResultadoDAO {
         }
 
     }
+    
+    public void registrarFaltas(int idCompetidor, int faltas) {
+    try {
+        String sql = "UPDATE resultados SET faltas=? WHERE idCompetidor=?";
+        PreparedStatement ps = conexion.prepareStatement(sql);
+        ps.setInt(1, faltas);
+        ps.setInt(2, idCompetidor);
+        ps.executeUpdate();
+    } catch (SQLException e) {
+        vista.mensaje("Error al registrar faltas: " + e.getMessage());
+    }
+}
 }
