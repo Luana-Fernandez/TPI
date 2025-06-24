@@ -164,7 +164,7 @@ public class ControladorPrincipal {
             int idCarrera = carrera.getIdCarrera();//sacamos el id de la carrera
             //se filtra los resultados con tiempo valido
             List<Resultado> resultadosDeCarrera = resultados.stream()
-                    .filter(r -> r.getCarrera() == idCarrera & r.getTiempoCompetidor() != null && !r.getTiempoCompetidor().isEmpty())
+                    .filter(r -> r.getIdCarrera() == idCarrera & r.getTiempoCompetidor() != null && !r.getTiempoCompetidor().isEmpty())
                     .sorted(Comparator.comparing(Resultado::getTiempoCompetidor))//ordenamos por tiempo (de menor a mayor )
                     .toList();//resultado a lista
             //resultados agregados al mapa por categoria
@@ -214,7 +214,7 @@ public class ControladorPrincipal {
             int idCarrera = carrera.getIdCarrera(); //Id de carrera
             //Filtro de resultados con tiempo valido
             List<Resultado> resultadosDeCarrera = resultados.stream()
-                    .filter(r -> r.getCarrera() == idCarrera && r.getTiempoCompetidor() != null && !r.getTiempoCompetidor().isEmpty())
+                    .filter(r -> r.getIdCarrera() == idCarrera && r.getTiempoCompetidor() != null && !r.getTiempoCompetidor().isEmpty())
                     .sorted(Comparator.comparing(Resultado::getTiempoCompetidor))//Ordenamos por tiempo ascendente
                     .limit(3)//dejamos los 3 mejores con menor tiempo
                     .toList();//convertimos el stream a una lista
@@ -334,7 +334,7 @@ public class ControladorPrincipal {
 
     public void registrarHoraFinCarrera() {
         int idCarrera = Integer.parseInt(vista.pedirDato("ingrese id de Carrera: "));
-        String tiempoCarrera = vista.pedirDato("Ingresar tiempo de finalizacion de la carrera (formato 00:00:00): ");
+        String tiempoCarrera = vista.pedirDato("Ingresar hora de finalizacion de la carrera (formato DD/MM/AAAA 00:00:00): ");
         for (Carrera carrera : carreras){
             if (carrera.getIdCarrera()== idCarrera){
                 carrera.setHoraFin(tiempoCarrera);

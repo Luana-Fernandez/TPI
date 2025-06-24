@@ -4,7 +4,7 @@ package com.mycompany.tpi.Modelos;
 public class Resultado {
     private int idResultado;
     private int idCompetidor;
-    private int carrera;
+    private int idCarrera;
     private String tiempoCompetidor;
     private String estado;
     private int numCorredor;
@@ -15,13 +15,13 @@ public class Resultado {
     
     public Resultado(int idCompetidor, int carrera, int numCorredor) {
         this.idCompetidor = idCompetidor;
-        this.carrera = carrera;
+        this.idCarrera = carrera;
         this.numCorredor = numCorredor;
     }
 
     public Resultado(int idCompetidor, int carrera, String tiempoCompetidor, String estado, int numCorredor, int faltas) {
         this.idCompetidor = idCompetidor;
-        this.carrera = carrera;
+        this.idCarrera = carrera;
         this.tiempoCompetidor = tiempoCompetidor;
         this.estado = estado;
         this.numCorredor = numCorredor;
@@ -44,12 +44,12 @@ public class Resultado {
         this.idCompetidor = idCompetidor;
     }
 
-    public int getCarrera() {
-        return carrera;
+    public int getIdCarrera() {
+        return idCarrera;
     }
 
-    public void setCarrera(int carrera) {
-        this.carrera = carrera;
+    public void setIdCarrera(int carrera) {
+        this.idCarrera = carrera;
     }
 
     public String getTiempoCompetidor() {
@@ -86,6 +86,6 @@ public class Resultado {
 
     @Override
     public String toString() {
-        return "Resultado{" + "idResultado=" + idResultado + ", idCompetidor=" + idCompetidor + ", carrera=" + carrera + ", tiempoCompetidor=" + tiempoCompetidor + ", estado=" + estado + ", numCorredor=" + numCorredor + ", faltas=" + faltas + '}';
+        return "Resultado{" + "idResultado=" + idResultado + ", idCompetidor=" + idCompetidor + ", carrera=" + idCarrera + ", tiempoCompetidor=" + tiempoCompetidor + ", estado=" + estado + ", numCorredor=" + numCorredor + ", faltas=" + faltas + '}';
     }
 }

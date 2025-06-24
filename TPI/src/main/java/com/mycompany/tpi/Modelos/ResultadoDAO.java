@@ -25,7 +25,7 @@ public class ResultadoDAO {
         int idGenerado = 0;
         try (PreparedStatement ps = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, resultado.getIdCompetidor());
-            ps.setInt(2, resultado.getCarrera());
+            ps.setInt(2, resultado.getIdCarrera());
             ps.setString(3, resultado.getTiempoCompetidor());
             ps.setString(4, resultado.getEstado());
             ps.setInt(5, resultado.getNumCorredor());

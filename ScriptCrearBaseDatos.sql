@@ -37,3 +37,6 @@ SHOW TABLES;
 SELECT * FROM competidores;
 SELECT * FROM jueces;
 SELECT * FROM carreras;
+
+ALTER TABLE competidores ADD dni int UNIQUE;
+ALTER TABLE jueces ADD dni int UNIQUE;

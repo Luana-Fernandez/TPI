@@ -70,12 +70,12 @@ public class CarreraDAO {
         return listaCarreras;
         }
         
-         public void registrarHoraFinCarrera(int idCarrera, String HoraFin) {
+         public void registrarHoraFinCarrera(int idCarrera, String horaFin) {
         try {
-            String sql = "UPDATE resultados SET horaFin=? WHERE idCarrera=?;";
+            String sql = "UPDATE carreras SET horaFin=? WHERE idCarrera=?;";
 
             PreparedStatement ps = conexion.prepareStatement(sql);
-            ps.setString(1,HoraFin);
+            ps.setString(1,horaFin);
             ps.setInt(2, idCarrera);
             ps.executeUpdate();
         } catch (SQLException e) {
