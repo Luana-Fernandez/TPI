@@ -14,8 +14,6 @@ import com.mycompany.tpi.vista.VistaPrincipal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.time.LocalTime;
 import java.util.*;
 
 public class ControladorPrincipal {
@@ -79,7 +77,7 @@ public class ControladorPrincipal {
         try {
             // Cargamos el driver y conectamos con la base de dato
             Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_competencia", "root", "sou322no");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_competencia", "root", "33411494");
             //Statement stmt = con.createStatement(); 
             //No lo estamos usando xq vamos a usar PreparedStatement
         } catch (Exception e) {
@@ -268,7 +266,6 @@ public class ControladorPrincipal {
                 vista.mensaje("\nCarrera: " + r.getIdCarrera() + "\nID Competidor: " + r.getIdCompetidor() + "\nTiempo del competidor: " + r.getTiempoCompetidor() + "\nEstado del competidor: " + r.getEstado() + "\nNumero del corredor: " + r.getNumCorredor() + "\nFaltas: " + r.getFaltas());
             }
         }
-        //Resultado{idResultado=4, idCompetidor=4, carrera=3, tiempoCompetidor=--:--:--, estado=abandono, numCorredor=36, faltas=1}
     }
 
     public void listarJueces() {
@@ -288,7 +285,6 @@ public class ControladorPrincipal {
             }
         }
     }
-    //Carrera{idCarrera=1, categoria=5K, horaInicio=12/05/2025 10:00, horaFin=null, ubicacion=VILLA MARIA - CORDOBA, detalle=nullidJuez=3}
 
     public void infoCompetidor() {
         //verificamos que la lista no este vacia
@@ -329,20 +325,22 @@ public class ControladorPrincipal {
         int dni = Integer.parseInt(vista.pedirDato("ingrese DNI de Corredor: "));
         String tiempoCorredor = vista.pedirDato("Ingresar tiempo de Corredor (formato 00:00:00): ");
         int idCarrera = Integer.parseInt(vista.pedirDato("Ingrese Id de carrera: "));
+        int encontrado=0;
         for (Competidor competidor : competidores) {
             if (competidor.getDni() == dni) {
                 for (Resultado resultado : resultados) {
                     if (resultado.getIdCompetidor() == competidor.getIdPersona() && resultado.getIdCarrera() == idCarrera) {
+                        encontrado=1;
                         resultado.setTiempoCompetidor(tiempoCorredor);
                         ResultadoDAO dao = new ResultadoDAO(con);
                         int idCorredor = competidor.getIdPersona();
                         dao.registrarTiempoCorredor(idCorredor, tiempoCorredor, idCarrera);
-
                     }
                 }
 
             }
         }
+        if (encontrado==0){vista.mensaje("Corredor no encontrada");}
 
     }
 
@@ -363,11 +361,12 @@ public class ControladorPrincipal {
         int dni = Integer.parseInt(vista.pedirDato("Ingrese DNI del Corredor: "));
         int idCarrera = Integer.parseInt(vista.pedirDato("Ingrese id Carrera: "));
         int faltas = Integer.parseInt(vista.pedirDato("Ingrese faltas del Corredor: "));
-
+        int encontrado=0;
         for (Competidor competidor : competidores) {
             if (competidor.getDni() == dni) {
                 for (Resultado resultado : resultados) {
                     if (resultado.getIdCompetidor() == competidor.getIdPersona() && resultado.getIdCarrera() == idCarrera) {
+                        encontrado=1;
                         resultado.setFaltas(faltas);
                         ResultadoDAO dao = new ResultadoDAO(con);
                         int idCompetidor = competidor.getIdPersona();
@@ -376,6 +375,7 @@ public class ControladorPrincipal {
                 }
             }
         }
+        if(encontrado==0){vista.mensaje("Corredor no Encontrado");}
     }
 
     //espera abandono completado
