@@ -1,4 +1,3 @@
-
 package com.mycompany.tpi.controlador;
 
 import com.mycompany.tpi.Modelos.Carrera;
@@ -18,7 +17,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalTime;
 import java.util.*;
-
 
 public class ControladorPrincipal {
 
@@ -55,15 +53,15 @@ public class ControladorPrincipal {
                     infoCompetencia();
                 case 9 ->
                     infoCompetidor();
-                    
+
                 // nuevo
                 case 10 ->
                     listarJueces();
                 case 11 ->
                     registrarTiempoCorredor();
-                case 12->
+                case 12 ->
                     registrarHoraFinCarrera();
-                case 13->
+                case 13 ->
                     registrarFaltas();
 
             }
@@ -97,7 +95,7 @@ public class ControladorPrincipal {
         String mail = vista.pedirDato("Ingrese mail: ");
         int dni = Integer.parseInt(vista.pedirDato("Ingrese DNI: "));
         // Creamos el competidor
-        Competidor c = new Competidor(nombre, apellido, mail, telefono,dni);
+        Competidor c = new Competidor(nombre, apellido, mail, telefono, dni);
         competidores.add(c);
         // Usamos el DAO
         CompetidorDAO dao = new CompetidorDAO(con);
@@ -116,7 +114,7 @@ public class ControladorPrincipal {
         String mail = vista.pedirDato("Ingrese mail: ");
         String telefono = vista.pedirDato("Ingrese telefono: ");
         int dni = Integer.parseInt(vista.pedirDato("Ingresar DNI: "));
-        Juez j = new Juez(nombre, apellido, mail, telefono,dni);
+        Juez j = new Juez(nombre, apellido, mail, telefono, dni);
         jueces.add(j);
         JuezDAO dao = new JuezDAO(con);
         try {
@@ -181,18 +179,18 @@ public class ControladorPrincipal {
         //Categorias disponibles
         vista.mensaje("Categorias: ");
         List<String> categorias = new ArrayList<>(rankingPorCategoria.keySet());
-        for (int i = 0; i <categorias.size(); i++){
+        for (int i = 0; i < categorias.size(); i++) {
             vista.mensaje((i + 1) + "." + categorias.get(i));
         }
         //Seleccion de categoria
         int opcion;
-        try{
-            opcion= Integer.parseInt(vista.pedirDato("Seleccione el numero de la categoria: "))-1;
-            if (opcion <0 || opcion >= categorias.size()){
+        try {
+            opcion = Integer.parseInt(vista.pedirDato("Seleccione el numero de la categoria: ")) - 1;
+            if (opcion < 0 || opcion >= categorias.size()) {
                 vista.mensaje("Opcion invalida.");
                 return;
             }
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             vista.mensaje("Entrada no valida.");
             return;
         }
@@ -200,12 +198,12 @@ public class ControladorPrincipal {
         vista.mensaje("Categoria: " + categoriaSeleccionada);
         //Mostrar rankind de la categoria
         List<Resultado> resultados = rankingPorCategoria.get(categoriaSeleccionada);
-            int puesto = 1;//contador de puestos
-            for (Resultado r : resultados) {
-                //datos de competidor por orden
-                vista.mensaje(puesto++ + "° - Competidor ID: " + r.getIdCompetidor() + " | Tiempo: " + r.getTiempoCompetidor());
-            }
+        int puesto = 1;//contador de puestos
+        for (Resultado r : resultados) {
+            //datos de competidor por orden
+            vista.mensaje(puesto++ + "° - Competidor ID: " + r.getIdCompetidor() + " | Tiempo: " + r.getTiempoCompetidor());
         }
+    }
 
     public void rankingGeneral() {
         //agrupamos por categoria con el MAP
@@ -260,6 +258,14 @@ public class ControladorPrincipal {
 
     }
 
+    public void listarJueces() {
+        System.out.println("\n Listado de jueces:");
+        for (Juez j : jueces) {
+            System.out.println(j.toString());
+        }
+
+    }
+
     public void infoCompetencia() {
         if (carreras.isEmpty()) {
             vista.mensaje("No hay carreras registradas.");
@@ -305,12 +311,34 @@ public class ControladorPrincipal {
         vista.mensaje("Email: " + encontrado.getMail());
         vista.mensaje("Telefono: " + encontrado.getTelefono());
     }
-    
-                    public void registrarTiempoCorredor(){}
-          
-                    public void registrarHoraFinCarrera(){}
+
+    public void registrarTiempoCorredor() {
+        int dni = Integer.parseInt(vista.pedirDato("ingrese DNI de Corredor: "));
+        String tiempoCorredor = vista.pedirDato("Ingresar tiempo de Corredor (formato 00:00:00): ");
+        for (Competidor competidor : competidores){
+            if (competidor.getDni()== dni){
+                for (Resultado resultado: resultados){
+                    if(resultado.getIdCompetidor()== competidor.getIdPersona()){
+                        resultado.setTiempoCompetidor(tiempoCorredor);
+                        ResultadoDAO dao = new ResultadoDAO(con);
+                        int idCorredor = competidor.getIdPersona();
+                        dao.registrarTiempoCorredor(idCorredor,tiempoCorredor);
+                        
+                    }
+                }
+                
+            }
+        }
         
-                    public void registrarFaltas(){}
+    }
+
+    public void registrarHoraFinCarrera() {
+        
+    }
+
+    public void registrarFaltas() {
+        
+    }
 
     public void cargarListas() {
         try {
@@ -328,7 +356,7 @@ public class ControladorPrincipal {
             vista.mensaje(carreras.toString());
             vista.mensaje(jueces.toString());
             vista.mensaje(resultados.toString());
-            */
+             */
         } catch (SQLException e) {
 
             vista.mensaje("error:" + e.getMessage());

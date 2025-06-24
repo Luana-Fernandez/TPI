@@ -15,7 +15,7 @@ public class ResultadoDAO {
 
     public ResultadoDAO() {
     }
-    
+
     public ResultadoDAO(Connection conexion) {
         this.conexion = conexion;
     }
@@ -62,11 +62,25 @@ public class ResultadoDAO {
             lista[4] = rs.getString("estado");
             lista[5] = rs.getString("numeroCorredor");
             lista[6] = rs.getString("faltas");
-            Resultado r = new Resultado(Integer.parseInt(lista[1]),Integer.parseInt(lista[2]), lista[3], lista[4],Integer.parseInt(lista[5]),Integer.parseInt(lista[6]));
+            Resultado r = new Resultado(Integer.parseInt(lista[1]), Integer.parseInt(lista[2]), lista[3], lista[4], Integer.parseInt(lista[5]), Integer.parseInt(lista[6]));
             r.setIdResultado(Integer.parseInt(lista[0]));
             listaResultados.add(r);
         }
 
         return listaResultados;
+    }
+
+    public void registrarTiempoCorredor(int idCorredor, String tiempoCorredor) {
+        try {
+            String sql = "UPDATE resultados SET tiempoCompetidor=? WHERE idCompetidor=?;";
+
+            PreparedStatement ps = conexion.prepareStatement(sql);
+            ps.setString(1,tiempoCorredor);
+            ps.setInt(2, idCorredor);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            vista.mensaje("Error: " + e.getMessage());
+        }
+
     }
 }
