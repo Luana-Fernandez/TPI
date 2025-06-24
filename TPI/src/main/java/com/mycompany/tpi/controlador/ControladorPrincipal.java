@@ -256,6 +256,14 @@ public class ControladorPrincipal {
         }
 
     }
+    
+    public void listarJueces(List<Juez> jueces) {
+        System.out.println("\n Listado de jueces:");
+        for (Juez j : jueces) {
+            System.out.println(j.toString());
+        }
+        
+    }
 
     public void infoCompetencia() {
         if (carreras.isEmpty()) {
