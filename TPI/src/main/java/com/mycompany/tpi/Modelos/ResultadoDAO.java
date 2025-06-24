@@ -74,7 +74,7 @@ public class ResultadoDAO {
             String sql = "UPDATE resultados SET tiempoCompetidor=? WHERE idCompetidor=? && idCarrera=?;";
 
             PreparedStatement ps = conexion.prepareStatement(sql);
-            ps.setString(1,tiempoCorredor);
+            ps.setString(1, tiempoCorredor);
             ps.setInt(2, idCorredor);
             ps.setInt(3, idCarrera);
             ps.executeUpdate();
@@ -84,18 +84,33 @@ public class ResultadoDAO {
         }
 
     }
-    
+
     public void registrarFaltas(int idCompetidor, int faltas, int idCarrera) {
-    try {
-        String sql = "UPDATE resultados SET faltas=? WHERE idCompetidor=? && idCarrera=?";
-        PreparedStatement ps = conexion.prepareStatement(sql);
-        ps.setInt(1, faltas);
-        ps.setInt(2, idCompetidor);
-        ps.setInt(3, idCarrera);
-        ps.executeUpdate();
-        vista.mensaje("Actualizacion Exitoso");
-    } catch (SQLException e) {
-        vista.mensaje("Error al registrar faltas: " + e.getMessage());
+        try {
+            String sql = "UPDATE resultados SET faltas=? WHERE idCompetidor=? && idCarrera=?";
+            PreparedStatement ps = conexion.prepareStatement(sql);
+            ps.setInt(1, faltas);
+            ps.setInt(2, idCompetidor);
+            ps.setInt(3, idCarrera);
+            ps.executeUpdate();
+            vista.mensaje("Actualizacion Exitoso");
+        } catch (SQLException e) {
+            vista.mensaje("Error al registrar faltas: " + e.getMessage());
+        }
     }
-}
+    
+
+    public void modificarEstado(int idCompetidor, String nuevoEstado, int idCarrera) {
+        try {
+            String sql = "UPDATE resultados SET estado=? WHERE idCompetidor=? && idCarrera=?";
+            PreparedStatement ps = conexion.prepareStatement(sql);
+            ps.setString(1, nuevoEstado);
+            ps.setInt(2, idCompetidor);
+            ps.setInt(3, idCarrera);
+            ps.executeUpdate();
+            vista.mensaje("Estado modificado Correctamente.");
+        } catch (SQLException e) {
+            vista.mensaje("Error al modificar el estado: " + e.getMessage());
+        }
+    }
 }
