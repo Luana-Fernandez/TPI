@@ -8,6 +8,6 @@ public class Juez extends Persona {
     }
        @Override
     public String toString() {
-        return "Id: "+this.getIdPersona()+" "+this.getNombre()+" "+this.getApellido();
+        return "Id: "+this.getIdPersona()+" - "+this.getNombre()+" "+this.getApellido();
     }
 }

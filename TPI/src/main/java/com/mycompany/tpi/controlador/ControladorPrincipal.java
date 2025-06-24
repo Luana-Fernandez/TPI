@@ -44,17 +44,17 @@ public class ControladorPrincipal {
                 case 4 ->
                     registrarCompetidorEnCarrera();
                 case 5 ->
-                    rankingCategoria();
+                    rankingCategoria(); // listo
                 case 6 ->
-                    rankingGeneral();
+                    rankingGeneral();   // listo
                 case 7 ->
-                    listaAbandonos();
+                    listaAbandonos();   // listo
                 case 8 ->
-                    infoCompetencia();
+                    infoCompetencia();  // listo
                 case 9 ->
-                    infoCompetidor();
+                    infoCompetidor();   // listo
                 case 10 ->
-                    listarJueces();
+                    listarJueces();     // listo
                 case 11 ->
                     registrarTiempoCorredor();  // listo
                 case 12 ->
@@ -150,15 +150,14 @@ public class ControladorPrincipal {
         vista.mensaje("\n--- REGISTRO DE COMPETIDOR EN CARRERA ---");
         int idCompetidor = Integer.parseInt(vista.pedirDato("Ingrese ID Competidor: "));
         int idCarrera = Integer.parseInt(vista.pedirDato("Ingrese ID Carrera: "));
-        String tiempo = vista.pedirDato("Ingrese el tiempo competidor (formato 00:00:00): ");
-        String estado = vista.pedirDato("Ingrese estado carrera: ");
+        String tiempo = "--:--:--";
+        String estado = "espera";
         int numCorredor = Integer.parseInt(vista.pedirDato("Ingrese numero de corredor: "));
-        int faltas = Integer.parseInt(vista.pedirDato("Ingrese numero de faltas: "));
+        int faltas = 0;
         Resultado r = new Resultado(idCompetidor, idCarrera, tiempo, estado, numCorredor, faltas);
         resultados.add(r);
         ResultadoDAO dao = new ResultadoDAO(con);
         r.setIdResultado(dao.insertarResultado(r));
-        vista.mensaje("Registro exitoso");
     }
 
     public void rankingCategoria() {
@@ -183,15 +182,17 @@ public class ControladorPrincipal {
             return;
         }
         //Categorias disponibles
-        vista.mensaje("Categorias: ");
+        vista.mensaje("\n--- CARRERAS --- ");
         List<String> categorias = new ArrayList<>(rankingPorCategoria.keySet());
         for (int i = 0; i < categorias.size(); i++) {
             vista.mensaje((i + 1) + "." + categorias.get(i));
         }
+        
+        vista.mensaje("----------------\n");
         //Seleccion de categoria
         int opcion;
         try {
-            opcion = Integer.parseInt(vista.pedirDato("Seleccione el numero de la categoria: ")) - 1;
+            opcion = Integer.parseInt(vista.pedirDato("Seleccione el numero de la carrera: ")) - 1;
             if (opcion < 0 || opcion >= categorias.size()) {
                 vista.mensaje("Opcion invalida.");
                 return;
@@ -201,7 +202,7 @@ public class ControladorPrincipal {
             return;
         }
         String categoriaSeleccionada = categorias.get(opcion);
-        vista.mensaje("Categoria: " + categoriaSeleccionada);
+        vista.mensaje("\n--- RESULTADOS DE CARRERA - " + categoriaSeleccionada+" ---");
         //Mostrar rankind de la categoria
         List<Resultado> resultados = rankingPorCategoria.get(categoriaSeleccionada);
         int puesto = 1;//contador de puestos
@@ -212,6 +213,8 @@ public class ControladorPrincipal {
     }
 
     public void rankingGeneral() {
+        
+        vista.mensaje("\n--- TOP 3 POR CARRERA --- ");
         //agrupamos por categoria con el MAP
         Map<String, List<Resultado>> top3PorCategoria = new HashMap<>();
         //recorremos con el for las carreras agrupadas
@@ -235,12 +238,14 @@ public class ControladorPrincipal {
         }
         //mostramos los 3 mejores resultados por cada categoria
         for (Map.Entry<String, List<Resultado>> entry : top3PorCategoria.entrySet()) {
-            vista.mensaje("Categoria: " + entry.getKey()); //nombre de la categoria
+            vista.mensaje("CARRERA: " + entry.getKey()); //nombre de la categoria
             int puesto = 1; //Primer puesto
             for (Resultado r : entry.getValue()) {
-                vista.mensaje(" - Competidor ID: " + r.getIdCompetidor() + "| Tiempo: " + r.getTiempoCompetidor());
+                vista.mensaje(puesto+" - Competidor ID: " + r.getIdCompetidor() + "| Tiempo: " + r.getTiempoCompetidor());
+                puesto++;
             }
         }
+        vista.mensaje("------------------------- ");
     }
 
     public void listaAbandonos() {
@@ -256,7 +261,7 @@ public class ControladorPrincipal {
         if (abandonos.isEmpty()) {
             vista.mensaje("No hay abandonos registrados.");
         } else {
-            vista.mensaje("Listado de competidores que abandonaron:");
+            vista.mensaje("\nListado de competidores que abandonaron:");
             for (Resultado r : abandonos) {
                 vista.mensaje("\nCarrera: " + r.getIdCarrera() + "\nID Competidor: " + r.getIdCompetidor() + "\nTiempo del competidor: " + r.getTiempoCompetidor() + "\nEstado del competidor: " + r.getEstado() + "\nNumero del corredor: " + r.getNumCorredor() + "\nFaltas: " + r.getFaltas());
             }
@@ -265,9 +270,9 @@ public class ControladorPrincipal {
     }
 
     public void listarJueces() {
-        System.out.println("\n Listado de jueces:");
+        vista.mensaje("\n Listado de jueces:");
         for (Juez j : jueces) {
-            System.out.println(j.toString());
+            vista.mensaje(j.toString());
         }
     }
    
@@ -276,7 +281,7 @@ public class ControladorPrincipal {
         if (carreras.isEmpty()) {
             vista.mensaje("No hay carreras registradas.");
         } else {
-            vista.mensaje("Información de todas las carreras registradas:");
+            vista.mensaje("\nInformacion de todas las carreras registradas:");
             for (Carrera c : carreras) {
                 vista.mensaje("\nCarrera: " + c.getIdCarrera() + "\nCategoria: " + c.getCategoria() + "\nHorario de inicio: " + c.getHoraInicio() + "\nHora de finalizacion: " + c.getHoraFin () + "\nUbicacion: " + c.getUbicacion() + "\nDetalles de la carrera: " + c.getDetalle());
             }
@@ -292,7 +297,7 @@ public class ControladorPrincipal {
         }
         int idPersonaBuscado;
         try {
-            idPersonaBuscado = Integer.parseInt(vista.pedirDato("Ingrese Id del competidor: "));
+            idPersonaBuscado = Integer.parseInt(vista.pedirDato("\nIngrese Id del competidor: "));
         } catch (NumberFormatException e) {
             vista.mensaje("El ID no es valido.");
             return;
