@@ -21,7 +21,7 @@ public class JuezDAO {
     }
     
     public int insertarJuez(Juez juez) throws SQLException {
-        String sql = "INSERT INTO jueces (nombre, apellido, telefono, email) VALUES (?, ?, ?, ?)";    
+        String sql = "INSERT INTO jueces (nombre, apellido, telefono, email, dni) VALUES (?, ?, ?, ?, ?)";    
         int idGenerado=0;
         try (PreparedStatement ps = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, juez.getNombre());
@@ -35,7 +35,7 @@ public class JuezDAO {
                 if (rs.next()) {
                     idGenerado = rs.getInt(1);
                     juez.setIdPersona(idGenerado); // Asignás el ID generado a tu objeto
-                    vista.mensaje("Juez insertado con ID: " + idGenerado);
+                    vista.mensaje("Registro Exitoso");
                 }
             }
         } catch (SQLException e) {
@@ -48,7 +48,6 @@ public class JuezDAO {
         String sql = "SELECT * FROM jueces";    
         PreparedStatement ps = conexion.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
-        System.out.println(rs);
         String[] lista= new String[6];
         
         List<Juez> listaJueces = new ArrayList<>();
@@ -63,7 +62,7 @@ public class JuezDAO {
             j.setIdPersona(Integer.parseInt(lista[0]));
             listaJueces.add(j);
             }
-        
+        vista.mensaje("Carga Jueces Exitosa");
         return listaJueces;
         }
 }

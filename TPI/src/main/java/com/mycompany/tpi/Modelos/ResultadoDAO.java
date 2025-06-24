@@ -36,7 +36,7 @@ public class ResultadoDAO {
                 if (rs.next()) {
                     idGenerado = rs.getInt(1);
                     resultado.setIdResultado(idGenerado);
-                    vista.mensaje("Resultado registrado con ID: " + idGenerado);
+                    vista.mensaje("Registro exitoso");
                     return idGenerado;
                 }
             }
@@ -50,7 +50,6 @@ public class ResultadoDAO {
         String sql = "SELECT * FROM resultados";
         PreparedStatement ps = conexion.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
-        System.out.println(rs);
         String[] lista = new String[7];
 
         List<Resultado> listaResultados = new ArrayList<>();
@@ -66,31 +65,35 @@ public class ResultadoDAO {
             r.setIdResultado(Integer.parseInt(lista[0]));
             listaResultados.add(r);
         }
-
+        vista.mensaje("Carga Resultados Exitosa");
         return listaResultados;
     }
 
-    public void registrarTiempoCorredor(int idCorredor, String tiempoCorredor) {
+    public void registrarTiempoCorredor(int idCorredor, String tiempoCorredor, int idCarrera) {
         try {
-            String sql = "UPDATE resultados SET tiempoCompetidor=? WHERE idCompetidor=?;";
+            String sql = "UPDATE resultados SET tiempoCompetidor=? WHERE idCompetidor=? && idCarrera=?;";
 
             PreparedStatement ps = conexion.prepareStatement(sql);
             ps.setString(1,tiempoCorredor);
             ps.setInt(2, idCorredor);
+            ps.setInt(3, idCarrera);
             ps.executeUpdate();
+            vista.mensaje("Actualizacion Exitoso");
         } catch (SQLException e) {
             vista.mensaje("Error: " + e.getMessage());
         }
 
     }
     
-    public void registrarFaltas(int idCompetidor, int faltas) {
+    public void registrarFaltas(int idCompetidor, int faltas, int idCarrera) {
     try {
-        String sql = "UPDATE resultados SET faltas=? WHERE idCompetidor=?";
+        String sql = "UPDATE resultados SET faltas=? WHERE idCompetidor=? && idCarrera=?";
         PreparedStatement ps = conexion.prepareStatement(sql);
         ps.setInt(1, faltas);
         ps.setInt(2, idCompetidor);
+        ps.setInt(3, idCarrera);
         ps.executeUpdate();
+        vista.mensaje("Actualizacion Exitoso");
     } catch (SQLException e) {
         vista.mensaje("Error al registrar faltas: " + e.getMessage());
     }

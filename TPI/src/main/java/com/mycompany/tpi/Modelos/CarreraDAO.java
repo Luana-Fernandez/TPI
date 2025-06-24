@@ -36,7 +36,7 @@ public class CarreraDAO {
                 if (rs.next()) {
                     idGenerado = rs.getInt(1);
                     carrera.setIdCarrera(idGenerado); // Asignás el ID generado a tu objeto
-                    vista.mensaje("Carrera insertada con ID: " + idGenerado);
+                    vista.mensaje("Registro Exitoso");
                 }
             }
         } catch (SQLException e) {
@@ -50,7 +50,6 @@ public class CarreraDAO {
         String sql = "SELECT * FROM carreras";    
         PreparedStatement ps = conexion.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
-        System.out.println(rs);
         String[] lista= new String[7];
         
         List<Carrera> listaCarreras = new ArrayList<>();
@@ -66,7 +65,7 @@ public class CarreraDAO {
             c.setIdCarrera(Integer.parseInt(lista[0]));
             listaCarreras.add(c);
             }
-        
+            vista.mensaje("Carga Carreras Exitosa");
         return listaCarreras;
         }
         
@@ -78,6 +77,7 @@ public class CarreraDAO {
             ps.setString(1,horaFin);
             ps.setInt(2, idCarrera);
             ps.executeUpdate();
+            vista.mensaje("Actualizacion Exitosa");
         } catch (SQLException e) {
             vista.mensaje("Error: " + e.getMessage());
         }

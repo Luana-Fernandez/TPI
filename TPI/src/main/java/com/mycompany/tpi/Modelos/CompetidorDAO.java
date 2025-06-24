@@ -22,10 +22,12 @@ public class CompetidorDAO {
     }
     
     public int insertarCompetidor(Competidor competidor) throws SQLException {
-        String sql = "INSERT INTO competidores (nombre, apellido, telefono, email) VALUES (?, ?, ?, ?)";    
+        
+        String sql = "INSERT INTO competidores (nombre, apellido, telefono, email, dni) VALUES (?, ?, ?, ?, ?)";    
         int idGenerado=0;
+        
         try (PreparedStatement ps = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            System.out.println("Intentando insertar en la base: " + competidor.getNombre());
+            
             ps.setString(1, competidor.getNombre());
             ps.setString(2, competidor.getApellido());
             ps.setString(3, competidor.getTelefono());
@@ -37,12 +39,12 @@ public class CompetidorDAO {
                 if (rs.next()) {
                     idGenerado = rs.getInt(1);
                     competidor.setIdPersona(idGenerado); // Asignás el ID generado a tu objeto
-                    vista.mensaje("Competidor insertado con ID: " + idGenerado);
+                    vista.mensaje("Registro Exitoso");
                 }
             }
         } catch (SQLException e) {
-            //vista.mensaje("Error al insertar competidor: " + e.getMessage());
-            e.printStackTrace();
+            vista.mensaje("Error al insertar competidor: " + e.getMessage());
+            //e.printStackTrace();
         }
         return idGenerado;
     }
@@ -52,7 +54,6 @@ public class CompetidorDAO {
         String sql = "SELECT * FROM competidores";    
         PreparedStatement ps = conexion.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
-        System.out.println(rs);
         String[] lista= new String[6];
         
         List<Competidor> listaCompetidores = new ArrayList<>();
@@ -67,7 +68,7 @@ public class CompetidorDAO {
             c.setIdPersona(Integer.parseInt(lista[0]));
             listaCompetidores.add(c);
             }
-        
+        vista.mensaje("Carga Competidores Exitosa");
         return listaCompetidores;
         }
 

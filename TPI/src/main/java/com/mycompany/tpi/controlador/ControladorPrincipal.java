@@ -53,16 +53,14 @@ public class ControladorPrincipal {
                     infoCompetencia();
                 case 9 ->
                     infoCompetidor();
-
-                // nuevo
                 case 10 ->
                     listarJueces();
                 case 11 ->
-                    registrarTiempoCorredor();
+                    registrarTiempoCorredor();  // listo
                 case 12 ->
-                    registrarHoraFinCarrera();
+                    registrarHoraFinCarrera();  // listo
                 case 13 ->
-                    registrarFaltas();
+                    registrarFaltas();  // listo
 
             }
         } while (opcion != 0);
@@ -89,6 +87,7 @@ public class ControladorPrincipal {
 
     public void registrarCompetidor() {
         //nombre,apellido,mail,telefono
+        vista.mensaje("\n--- REGISTRO DE COMPETIDOR ---");
         String nombre = vista.pedirDato("Ingrese nombre: ");
         String apellido = vista.pedirDato("Ingrese apellido: ");
         String telefono = vista.pedirDato("Ingrese telefono: ");
@@ -109,6 +108,8 @@ public class ControladorPrincipal {
     }
 
     public void registrarJuez() {
+        
+        vista.mensaje("\n--- REGISTRO DE JUEZ ---");
         String nombre = vista.pedirDato("Ingrese nombre: ");
         String apellido = vista.pedirDato("Ingrese apellido: ");
         String mail = vista.pedirDato("Ingrese mail: ");
@@ -125,12 +126,15 @@ public class ControladorPrincipal {
     }
 
     public void registrarCarrera() {
-        String categoria = vista.pedirDato("Ingrese categoria de carrera: ");
-        String horaInicio = vista.pedirDato("Ingrese hora de inicio: ");
-        String horaFin = vista.pedirDato("Ingrese hora fin: ");
+        
+        vista.mensaje("\n--- REGISTRO DE CARRERA ---");
+        String categoria = vista.pedirDato("Ingrese Nombre de carrera: ");
+        String horaInicio = vista.pedirDato("Ingrese Dia y Hora de Carrera (dd/mm/aaaa hh:mm): ");
+        String horaFin = "";
         String ubicacion = vista.pedirDato("Ingrese ubicacion: ");
-        String detalle = vista.pedirDato("Ingrese detalle: ");
-        int idJuez = Integer.parseInt(vista.pedirDato("Ingrese ID Juez: "));
+        String detalle = vista.pedirDato("Ingrese Comentario: ");
+        listarJueces();
+        int idJuez = Integer.parseInt(vista.pedirDato("\nIngrese ID Juez: "));
         Carrera ca = new Carrera(categoria, horaInicio, horaFin, ubicacion, detalle, idJuez);
         carreras.add(ca);
         CarreraDAO dao = new CarreraDAO(con);
@@ -142,9 +146,11 @@ public class ControladorPrincipal {
     }
 
     public void registrarCompetidorEnCarrera() {
+        
+        vista.mensaje("\n--- REGISTRO DE COMPETIDOR EN CARRERA ---");
         int idCompetidor = Integer.parseInt(vista.pedirDato("Ingrese ID Competidor: "));
         int idCarrera = Integer.parseInt(vista.pedirDato("Ingrese ID Carrera: "));
-        String tiempo = vista.pedirDato("Ingrese el tiempo competidor (formato 00:00): ");
+        String tiempo = vista.pedirDato("Ingrese el tiempo competidor (formato 00:00:00): ");
         String estado = vista.pedirDato("Ingrese estado carrera: ");
         int numCorredor = Integer.parseInt(vista.pedirDato("Ingrese numero de corredor: "));
         int faltas = Integer.parseInt(vista.pedirDato("Ingrese numero de faltas: "));
@@ -315,14 +321,15 @@ public class ControladorPrincipal {
     public void registrarTiempoCorredor() {
         int dni = Integer.parseInt(vista.pedirDato("ingrese DNI de Corredor: "));
         String tiempoCorredor = vista.pedirDato("Ingresar tiempo de Corredor (formato 00:00:00): ");
+        int idCarrera = Integer.parseInt(vista.pedirDato("Ingrese Id de carrera: "));
         for (Competidor competidor : competidores){
             if (competidor.getDni()== dni){
                 for (Resultado resultado: resultados){
-                    if(resultado.getIdCompetidor()== competidor.getIdPersona()){
+                    if(resultado.getIdCompetidor()== competidor.getIdPersona() && resultado.getIdCarrera()== idCarrera){
                         resultado.setTiempoCompetidor(tiempoCorredor);
                         ResultadoDAO dao = new ResultadoDAO(con);
                         int idCorredor = competidor.getIdPersona();
-                        dao.registrarTiempoCorredor(idCorredor,tiempoCorredor);
+                        dao.registrarTiempoCorredor(idCorredor,tiempoCorredor,idCarrera);
                         
                     }
                 }
@@ -333,7 +340,7 @@ public class ControladorPrincipal {
     }
 
     public void registrarHoraFinCarrera() {
-        int idCarrera = Integer.parseInt(vista.pedirDato("ingrese id de Carrera: "));
+        int idCarrera = Integer.parseInt(vista.pedirDato("Ingrese id de Carrera: "));
         String tiempoCarrera = vista.pedirDato("Ingresar hora de finalizacion de la carrera (formato DD/MM/AAAA 00:00:00): ");
         for (Carrera carrera : carreras){
             if (carrera.getIdCarrera()== idCarrera){
@@ -347,16 +354,17 @@ public class ControladorPrincipal {
 
     public void registrarFaltas() {
     int dni = Integer.parseInt(vista.pedirDato("Ingrese DNI del Corredor: "));
+    int idCarrera = Integer.parseInt(vista.pedirDato("Ingrese id Carrera: "));
     int faltas = Integer.parseInt(vista.pedirDato("Ingrese faltas del Corredor: "));
 
     for (Competidor competidor : competidores) {
         if (competidor.getDni() == dni) {
             for (Resultado resultado : resultados) {
-                if (resultado.getIdCompetidor() == competidor.getIdPersona()) {
+                if (resultado.getIdCompetidor() == competidor.getIdPersona() && resultado.getIdCarrera()== idCarrera) {
                     resultado.setFaltas(faltas);
                     ResultadoDAO dao = new ResultadoDAO(con);
                     int idCompetidor = competidor.getIdPersona();
-                    dao.registrarFaltas(idCompetidor, faltas);
+                    dao.registrarFaltas(idCompetidor, faltas,idCarrera);
                 }
             }
         }

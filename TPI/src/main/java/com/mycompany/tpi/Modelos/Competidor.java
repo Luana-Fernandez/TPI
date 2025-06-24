@@ -8,6 +8,6 @@ public class Competidor extends Persona{
     
     @Override
     public String toString() {
-        return "Competidor: "+this.getNombre()+" "+this.getApellido();
+        return "Competidor: "+this.getNombre()+" "+this.getApellido()+" dni:"+this.getDni();
     }
 }

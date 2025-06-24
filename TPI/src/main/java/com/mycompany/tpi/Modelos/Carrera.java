@@ -83,7 +83,7 @@ public class Carrera {
 
     @Override
     public String toString() {
-        return "Carrera{" + "idCarrera=" + idCarrera + ", categoria=" + categoria + ", horaInicio=" + horaInicio + ", horaFin=" + horaFin + ", ubicacion=" + ubicacion + ", detalle=" + detalle +  "idJuez=" + idJuez +'}';
+        return "idCarrera: " +idCarrera + " Nombre: " + categoria + ", Dia y Hora de inicio: " + horaInicio +" ubicacion: " + ubicacion;
     }
 
 }
