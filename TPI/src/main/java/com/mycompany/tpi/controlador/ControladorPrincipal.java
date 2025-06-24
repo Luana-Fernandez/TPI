@@ -333,6 +333,15 @@ public class ControladorPrincipal {
     }
 
     public void registrarHoraFinCarrera() {
+        int idCarrera = Integer.parseInt(vista.pedirDato("ingrese id de Carrera: "));
+        String tiempoCarrera = vista.pedirDato("Ingresar tiempo de finalizacion de la carrera (formato 00:00:00): ");
+        for (Carrera carrera : carreras){
+            if (carrera.getIdCarrera()== idCarrera){
+                carrera.setHoraFin(tiempoCarrera);
+                CarreraDAO dao = new CarreraDAO(con);
+                dao.registrarHoraFinCarrera(idCarrera, tiempoCarrera);
+            }
+        }
         
     }
 

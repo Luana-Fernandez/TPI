@@ -69,4 +69,18 @@ public class CarreraDAO {
         
         return listaCarreras;
         }
+        
+         public void registrarHoraFinCarrera(int idCarrera, String HoraFin) {
+        try {
+            String sql = "UPDATE resultados SET horaFin=? WHERE idCarrera=?;";
+
+            PreparedStatement ps = conexion.prepareStatement(sql);
+            ps.setString(1,HoraFin);
+            ps.setInt(2, idCarrera);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            vista.mensaje("Error: " + e.getMessage());
+        }
+
+    }
 }
