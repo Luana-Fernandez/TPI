@@ -77,7 +77,7 @@ public class ControladorPrincipal {
         try {
             // Cargamos el driver y conectamos con la base de dato
             Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_competencia", "root", "sou322no");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_competencia", "root", "33411494");
             //Statement stmt = con.createStatement(); 
             //No lo estamos usando xq vamos a usar PreparedStatement
         } catch (Exception e) {
