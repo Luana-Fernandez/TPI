@@ -77,7 +77,7 @@ public class ControladorPrincipal {
         try {
             // Cargamos el driver y conectamos con la base de dato
             Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_competencia", "root", "33411494");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_competencia", "root", "sou322no");
             //Statement stmt = con.createStatement(); 
             //No lo estamos usando xq vamos a usar PreparedStatement
         } catch (Exception e) {
@@ -207,7 +207,7 @@ public class ControladorPrincipal {
         int puesto = 1;//contador de puestos
         for (Resultado r : resultados) {
             //datos de competidor por orden
-            vista.mensaje(puesto++ + "° - Competidor ID: " + r.getIdCompetidor() + " | Tiempo: " + r.getTiempoCompetidor());
+            vista.mensaje(puesto++ + " - Competidor ID: " + r.getIdCompetidor() + " | Tiempo: " + r.getTiempoCompetidor());
         }
     }
 
@@ -238,7 +238,7 @@ public class ControladorPrincipal {
             vista.mensaje("Categoria: " + entry.getKey()); //nombre de la categoria
             int puesto = 1; //Primer puesto
             for (Resultado r : entry.getValue()) {
-                vista.mensaje("° - Competidor ID: " + r.getIdCompetidor() + "| Tiempo: " + r.getTiempoCompetidor());
+                vista.mensaje(" - Competidor ID: " + r.getIdCompetidor() + "| Tiempo: " + r.getTiempoCompetidor());
             }
         }
     }
@@ -258,10 +258,10 @@ public class ControladorPrincipal {
         } else {
             vista.mensaje("Listado de competidores que abandonaron:");
             for (Resultado r : abandonos) {
-                vista.mensaje(r.toString());
+                vista.mensaje("\nCarrera: " + r.getIdCarrera() + "\nID Competidor: " + r.getIdCompetidor() + "\nTiempo del competidor: " + r.getTiempoCompetidor() + "\nEstado del competidor: " + r.getEstado() + "\nNumero del corredor: " + r.getNumCorredor() + "\nFaltas: " + r.getFaltas());
             }
         }
-
+        //Resultado{idResultado=4, idCompetidor=4, carrera=3, tiempoCompetidor=--:--:--, estado=abandono, numCorredor=36, faltas=1}
     }
 
     public void listarJueces() {
@@ -269,8 +269,8 @@ public class ControladorPrincipal {
         for (Juez j : jueces) {
             System.out.println(j.toString());
         }
-
     }
+   
 
     public void infoCompetencia() {
         if (carreras.isEmpty()) {
@@ -278,11 +278,11 @@ public class ControladorPrincipal {
         } else {
             vista.mensaje("Información de todas las carreras registradas:");
             for (Carrera c : carreras) {
-                vista.mensaje(c.toString());
+                vista.mensaje("\nCarrera: " + c.getIdCarrera() + "\nCategoria: " + c.getCategoria() + "\nHorario de inicio: " + c.getHoraInicio() + "\nHora de finalizacion: " + c.getHoraFin () + "\nUbicacion: " + c.getUbicacion() + "\nDetalles de la carrera: " + c.getDetalle());
             }
         }
-
     }
+     //Carrera{idCarrera=1, categoria=5K, horaInicio=12/05/2025 10:00, horaFin=null, ubicacion=VILLA MARIA - CORDOBA, detalle=nullidJuez=3}
 
     public void infoCompetidor() {
         //verificamos que la lista no este vacia
@@ -313,7 +313,8 @@ public class ControladorPrincipal {
         //Mostramos detalles del competidor
         vista.mensaje("Datos del Competidor");
         vista.mensaje("Nombre: " + encontrado.getNombre());
-        vista.mensaje("Apellido: " + encontrado.getApellido());
+        vista.mensaje("Apellido: " + encontrado.getApellido());        
+        vista.mensaje("Dni: " + encontrado.getDni());
         vista.mensaje("Email: " + encontrado.getMail());
         vista.mensaje("Telefono: " + encontrado.getTelefono());
     }
